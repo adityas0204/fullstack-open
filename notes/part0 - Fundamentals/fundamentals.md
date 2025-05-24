@@ -1,4 +1,6 @@
-# [Fundamentals](https://fullstackopen.com/en/part0/fundamentals_of_web_apps#loading-a-page-containing-java-script-review) using [App](https://studies.cs.helsinki.fi/exampleapp/) ([Github](https://github.com/mluukkai/example_app))
+# [Fundamentals](https://fullstackopen.com/en/part0) ([Example app](https://github.com/mluukkai/example_app))
+
+In this part, we will familiarize ourselves with the practicalities of taking the course. After that, we will have an overview of the basics of web development and also talk about the advances in web application development during the last few decades.
 
 ### Reminders
 1. Open the developer console (ctrl shift i)
