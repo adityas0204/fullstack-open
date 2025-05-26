@@ -13,13 +13,14 @@ We will use Vite, which can quickly make a React app. It is a frontend developme
   - All content that needs to be rendered is done so with components in React
   - **Always have ```export default App```**
 
-```
+```js
 const App = () => (
   <div>
     <p>Hello world</p>
   </div>
 )
 ```
+
 - Component is technically a JS function
   - JSX file allows us to do this
   - Component's variable names must be capitalized
@@ -32,7 +33,7 @@ const App = () => (
     - The root component can contain fragments instead to avoid "extra" div element
       - ie. `<> blah blah blah </>`
 
-```
+```js
 const App = () => {
   const now = new Date()
   const a = 10
@@ -68,7 +69,7 @@ const App = () => {
 ### Props: passing data to components
 - Props are used to pass data to components
 
-```
+```js
 const Hello = (props) => {
   return (
     <div>
