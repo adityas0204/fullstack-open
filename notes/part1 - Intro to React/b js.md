@@ -30,7 +30,7 @@ x = 4               // causes an error
 
 ### Arrays
 
-```js
+```jsx
 const t = [1, -1, 3]
 
 t.push(5)
@@ -51,7 +51,7 @@ t.forEach(value => {
 - The method `push` adds item to array
 - For React, we want to stick to immutable data structures paradigm, so prefer method `concat` to create new array with added element:
 
-```js
+```jsx
 const t = [1, -1, 3]
 
 const t2 = t.concat(5)  // creates new array
@@ -62,13 +62,13 @@ console.log(t2) // [1, -1, 3, 5] is printed
 
 - Map creates a new array after applying the function given as a param to the old array:
 
-```js
+```jsx
 const t = [1, 2, 3]
 
 const m1 = t.map(value => value * 2)
 console.log(m1)   // [2, 4, 6] is printed
 ```
-```js
+```jsx
 const m2 = t.map(value => '<li>' + value + '</li>')
 console.log(m2)  
 // [ '<li>1</li>', '<li>2</li>', '<li>3</li>' ] is printed
@@ -79,7 +79,7 @@ console.log(m2)
 
 - Destructuring assignment used to assign elements of array to variables:
 
-```js
+```jsx
 const t = [1, 2, 3, 4, 5]
 
 const [first, second, ...rest] = t
@@ -93,7 +93,7 @@ console.log(rest)          // [3, 4, 5] is printed
 - Common way to define objects by using object literals 
   - List properties within braces:
 
-```js
+```jsx
 const object1 = {
   name: 'Arto Hellas',
   age: 35,
@@ -118,7 +118,7 @@ const object3 = {
 
 - Properties of objects can be referenced using "dot" notation or brackets
 
-```js
+```jsx
 console.log(object1.name)         // Arto Hellas is printed
 const fieldName = 'age'
 console.log(object1[fieldName])    // 35 is printed
@@ -130,7 +130,7 @@ console.log(object1[fieldName])    // 35 is printed
 
 - Arrow method: 
 
-```js
+```jsx
 const sum = (p1, p2) => {
   console.log(p1)
   console.log(p2)
@@ -140,7 +140,7 @@ const sum = (p1, p2) => {
 
 - For single param you can remove brackets:
 
-```js
+```jsx
 const square = p => {
   console.log(p)
   return p * p
@@ -150,11 +150,11 @@ const square = p => {
 - Can be further reduced to the following if we remove console call:
   - The single expression is also returned
 
-```js
+```jsx
 const square = p => p * p
 ```
 
-```js
+```jsx
 const t = [1, 2, 3]
 const tSquared = t.map(p => p * p)
 // tSquared is now [1, 4, 9]
@@ -166,7 +166,7 @@ This section is not relevant to the course due to the use of React Hooks, but is
 
 - Objects have a _this_ keyword which refers to itself: 
 
-```js
+```jsx
 const arto = {
   name: 'Arto Hellas',
   age: 35,
@@ -182,7 +182,7 @@ arto.greet()  // "hello, my name is Arto Hellas" gets printed
 
 - Methods can also be assigned after object creation:
 
-```js
+```jsx
 const arto = {
   name: 'Arto Hellas',
   age: 35,
@@ -202,7 +202,7 @@ arto.growOlder()
 console.log(arto.age)   // 36 is printed
 ```
 
-```js
+```jsx
 arto.greet()       // "hello, my name is Arto Hellas" gets printed
 
 const referenceToGreet = arto.greet
@@ -218,7 +218,7 @@ referenceToGreet() // prints "hello, my name is undefined"
 - JS doesn't have classes, but we can simulate them 
   - Here is the syntax for a Person class:
 
-```js
+```jsx
 class Person {
   constructor(name, age) {
     this.name = name

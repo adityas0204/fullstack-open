@@ -2,7 +2,7 @@
 
 Example code:
 
-```js
+```jsx
 const Hello = (props) => {
   return (
     <div>
@@ -32,7 +32,7 @@ const App = () => {
 - Can put a function in a component
     - Do not need params for helper function since it has access to all props in component:
 
-```js
+```jsx
 const Hello = (props) => {
 
   const bornYear = () => {
@@ -57,20 +57,20 @@ const Hello = (props) => {
 - Destructuring allows us to streamline our component by assigning values of the props directly into variables
   - Here is an example without destructuring
 
-```js
+```jsx
 const name = props.name 
 const age = props.age
 ```
 
 - Here is an example that uses destructuring:
 
-```js
+```jsx
 const { name, age } = props
 ```
 
 - If object that is getting destructured has values as shown below, then  expression `const { name, age } = props` assigns values 'Arto Hellas' to name and 35 to age
 
-```js
+```jsx
 props = {
   name: 'Arto Hellas',
   age: 35,
@@ -79,7 +79,7 @@ props = {
 
 - It can be taken a step further by destructuring the props that are passed directly into variables:
 
-```js
+```jsx
 const Hello = ({ name, age }) => {}
 ```
 
@@ -89,7 +89,7 @@ const Hello = ({ name, age }) => {}
   - ie. a button can be clicked that updates a counter
 
 _App.jsx_:
-```js
+```jsx
 const App = (props) => {
   const {counter} = props
   return (
@@ -101,7 +101,7 @@ export default App
 ```
 
 _main.jsx_:
-```js
+```jsx
 import ReactDOM from 'react-dom/client'
 
 import App from './App'
@@ -132,7 +132,7 @@ refresh()
   - Done using React's state hooks
 
 _main.jsx_:
-```js
+```jsx
 import ReactDOM from 'react-dom/client'
 
 import App from './App'
@@ -141,7 +141,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />)
 ```
 
 _App.jsx_:
-```js
+```jsx
 import { useState } from 'react'
 
 const App = () => {
@@ -171,7 +171,7 @@ export default App
 - `setCounter` is a state modifying function
   - When called _React re-renders the component_, which means that the function body of the component gets re-executed:
 
-```js
+```jsx
 () => {
 
   const [ counter, setCounter ] = useState(0)
@@ -196,3 +196,169 @@ export default App
   - This will run indefinitely
 - You can add a debugging statement: `console.log('rendering...', counter)`
 
+### Event handlers
+
+- These are registered to be called when specific events occur
+  - For example, when a button is clicked
+- We can register an event handler function to the _click_ event as so:
+
+```jsx
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const handleClick = () => {
+    console.log('clicked')
+  }
+
+  return (
+    <div>
+      <div>{counter}</div>
+
+      <button onClick={handleClick}>
+        plus
+      </button>
+    </div>
+  )
+}
+``` 
+
+- The button's _onClick_ attribute references `handleClick` function
+  - When the _plus_ button is clicked, `handleClick` is called
+- We can change the event handler to the following to get the counter behaviour:
+
+```jsx
+<button onClick={() => setCounter(counter + 1)}>
+  plus
+</button>
+```
+
+### An event handler is a function
+
+- If we tried to define the event handlers in a simpler format, then our application would not work:
+
+```jsx
+<button onClick={setCounter(counter + 1)}> 
+  plus
+</button>
+```
+
+- This is because an event handler is supposed to be either a _function_ or a _function reference_
+- Good practice is to define event handlers outside of the JSX-templates:
+
+```jsx
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const increaseByOne = () => setCounter(counter + 1)
+  
+  const setToZero = () => setCounter(0)
+
+  return (
+    <div>
+      <div>{counter}</div>
+
+      <button onClick={increaseByOne}>
+        plus
+      </button>
+
+      <button onClick={setToZero}>
+        zero
+      </button>
+    </div>
+  )
+}
+```
+
+### Passing state - to child components
+
+- Recommended to use small and reuseable React components
+  - We will break our components up 
+- [Lifting states up](https://react.dev/learn/sharing-state-between-components) in the component heirarchy is good practice
+  - So, put app's state in _App_ component and pass it to _Display_ component through _props_:
+
+```jsx
+const Display = (props) => {
+  return (
+    <div>{props.counter}</div>
+  )
+}
+```
+
+- This component is easy to integrate and use:
+
+```jsx
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const increaseByOne = () => setCounter(counter + 1)
+  const setToZero = () => setCounter(0)
+
+  return (
+    <div>
+
+      <Display counter={counter}/>
+      <button onClick={increaseByOne}>
+        plus
+      </button>
+      <button onClick={setToZero}> 
+        zero
+      </button>
+    </div>
+  )
+}
+```
+
+- Now make _Button_ component for buttons:
+
+```jsx
+const Button = (props) => {
+  return (
+    <button onClick = {props.onClick}>
+      {props.text}
+    </button>
+  )
+}
+```
+
+- Integrating the new buttons into out _App_ component:
+
+```jsx
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const increaseByOne = () => setCounter(counter + 1)
+  const decreaseByOne = () => setCounter(counter - 1)
+  const setToZero = () => setCounter(0)
+
+  return (
+    <div>
+      <Display counter = {counter}/>
+      <Button 
+      onClick = {increaseByOne}
+      text = 'plus'
+      />
+      <Button 
+      onClick = {setToZero}
+      text = 'zero'
+      />
+      <Button 
+      onClick = {decreaseByOne}
+      text = 'minus'
+      />
+    </div>
+  )
+}
+```
+
+- In React it is good practice to "use onSomething names for props which take functions which handle events and handleSomething for the actual function definitions which handle those events"
+
+### Refactoring the components
+
+- We can make the componenets easier to read through strealining:
+
+```jsx
+const Display = ({counter}) => <div> {counter} </div>
+```
+```jsx
+const Button = ({onClick, text}) => <button onClick = {onClick}> {text} </button>
+```
