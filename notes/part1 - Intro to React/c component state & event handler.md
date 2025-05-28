@@ -350,11 +350,11 @@ const App = () => {
 }
 ```
 
-- In React it is good practice to "use onSomething names for props which take functions which handle events and handleSomething for the actual function definitions which handle those events"
+- In React it is good practice to "use 'onSomething' names for props which take functions which handle events and handleSomething for the actual function definitions which handle those events"
 
 ### Refactoring the components
 
-- We can make the componenets easier to read through strealining:
+- We can make the componenets easier to read through refactoring:
 
 ```jsx
 const Display = ({counter}) => <div> {counter} </div>
