@@ -13,7 +13,7 @@ const Hello = (props) => {
 const App = () => {
   const name = 'Amongus'
   const age = 19
-
+  
   const friends = [
     { name: 'Peter', age: 4 },
     { name: 'Maya', age: 10 },
@@ -32,3 +32,4 @@ const App = () => {
 }
 
 export default App
+
