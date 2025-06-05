@@ -86,8 +86,8 @@ const [newNote, setNewNote] = useState('a new note...')
 ```
 
 - We assigned a piece of _App_ component's state as the _value_ attribute of the input, so the _App_ component controls it
-  - The input can not be editted by the user
-  - To enable editting, we need to register an _event handler_ that synchornizes changes to the state and input:
+  - The input can not be edited by the user
+  - To enable editing, we need to register an _event handler_ that synchronizes changes to the state and input:
 
 ```jsx
 const handleNoteChange = (event) => {
@@ -130,7 +130,7 @@ const addNote = (event) => {
 
 - Every note is an object that has content, 50% chance to be important and an ID
   - Concat _noteObject_ to the state _notes_ because concat creates copy of the array with the new item added 
-- Event handler also resets value of _newNote_ to `' '`
+- Event handler also resets value of _newNote_ to `''`
 
 ### Filtering Displayed Elements
 
@@ -141,7 +141,7 @@ const [showAll, setShowAll] = useState(true)
 ```
 
 - We can create a list, `notesToShow` that contains all the notes that need to be displayed
-  - The items in the list depends on the `showAll` state:
+  - The items in the list depend on the `showAll` state:
 
 ```jsx
 import { useState } from 'react'

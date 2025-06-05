@@ -14,8 +14,8 @@ const [right, setRight] = useState(0)
 
 ```jsx
 {
-    left:0,
-    right:0
+    left: 0,
+    right: 0
 }
 ```
 
@@ -79,7 +79,7 @@ const handleLeftClick = () => {
 }
 ```
 
-- `...clicks` creates a new object that has copies of all the properties of original object, then we manipulate the value of `clicks.left`
+- `...clicks` creates a new object that has copies of all the properties of the original object, then we manipulate the value of `clicks.left`
 - Assigning the new object to a variable is not necessary:
 
 ```jsx
@@ -102,7 +102,6 @@ const App = () => {
     setLeft(left + 1)
   }
 
-
   const handleRightClick = () => {
     setAll(allClicks.concat('R'))
     setRight(right + 1)
@@ -120,9 +119,9 @@ const App = () => {
 }
 ```
 
-- Every click is stored in separate piece of state called `allClicks` which is initialized as an empty array
+- Every click is stored in a separate piece of state called `allClicks` which is initialized as an empty array
   - When _left_ button clicked, letter _L_ is concatenated to `allClicks` 
-  - `.concat()` method returns copy of array, so we are not mutating original state
+  - `.concat()` method returns a copy of the array, so we are not mutating original state
   - Do not use `.push()` since it mutates the original state, "which can lead to problems that are very hard to debug"
 - `.join()` method joins all items in list into a single string
 

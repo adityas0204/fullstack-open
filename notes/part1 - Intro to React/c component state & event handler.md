@@ -68,7 +68,7 @@ const age = props.age
 const { name, age } = props
 ```
 
-- If object that is getting destructured has values as shown below, then  expression `const { name, age } = props` assigns values 'Arto Hellas' to name and 35 to age
+- If object that is getting destructured has values as shown below, then expression `const { name, age } = props` assigns values 'Arto Hellas' to name and 35 to age
 
 ```jsx
 props = {
@@ -224,7 +224,7 @@ const App = () => {
 
 - The button's _onClick_ attribute references `handleClick` function
   - When the _plus_ button is clicked, `handleClick` is called
-- We can change the event handler to the following to get the counter behaviour:
+- We can change the event handler to the following to get the counter behavior:
 
 ```jsx
 <button onClick={() => setCounter(counter + 1)}>
@@ -271,9 +271,9 @@ const App = () => {
 
 ### Passing state - to child components
 
-- Recommended to use small and reuseable React components
+- Recommended to use small and reusable React components
   - We will break our components up 
-- [Lifting states up](https://react.dev/learn/sharing-state-between-components) in the component heirarchy is good practice
+- [Lifting states up](https://react.dev/learn/sharing-state-between-components) in the component hierarchy is good practice
   - So, put app's state in _App_ component and pass it to _Display_ component through _props_:
 
 ```jsx
@@ -320,7 +320,7 @@ const Button = (props) => {
 }
 ```
 
-- Integrating the new buttons into out _App_ component:
+- Integrating the new buttons into our _App_ component:
 
 ```jsx
 const App = () => {
@@ -354,7 +354,7 @@ const App = () => {
 
 ### Refactoring the components
 
-- We can make the componenets easier to read through refactoring:
+- We can make the components easier to read through refactoring:
 
 ```jsx
 const Display = ({counter}) => <div> {counter} </div>

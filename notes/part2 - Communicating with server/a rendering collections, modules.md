@@ -2,7 +2,7 @@
 
 ### Reminders
 - Use `console.log()` often to debug
-  - In VSC I have made a snippet which easily creates `console.log()` when `clog` is typed 
+  - In VS Code I have made a snippet which easily creates `console.log()` when `clog` is typed 
 
 ### JS Arrays
 - [Functional Programming Review](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84)
@@ -53,7 +53,7 @@ notes.map(note => <li>{note.content}</li>)
 ### Key-attribute
 
 - Each child in a list should have a unique key value
-  - When we doing our `map` method shenanigans we need to include the key:
+  - When we are doing our `map` method shenanigans we need to include the key:
 
 ```jsx
 <ul>
@@ -87,7 +87,7 @@ notes.map(note => <li>{note.content}</li>)
 
 - We can also split displaying a single note into its own component _Note_ 
   - This means that the _key_ attribute must be defined for the _Note_ component, and not for the `li` tag as before
-  - This is because the _key_ attribute must go to the top level elemnt return by `map`, so the key goes on the _Note_ component here
+  - This is because the _key_ attribute must go to the top level element returned by `map`, so the key goes on the _Note_ component here
 
 ```jsx
 const Note = ({ note }) => <li>{note.content}</li>
@@ -106,7 +106,7 @@ const App = ({ notes }) => {
 }
 ```
 
-- It is commong practice to declare each component in its own file as an _ES6-module_
+- It is common practice to declare each component in its own file as an _ES6-module_
 - First two lines import two modules:
 
 ```jsx
@@ -116,7 +116,7 @@ import App from "./App"
 
 - The module _react-dom/_ is placed into the variable `ReactDOM`
 - The module _./App_ is placed into the variable `App`
-- Lets make _Note_ component its own module
+- Let's make _Note_ component its own module
 - In small projects, component modules are put in a directory called _components_ in the src folder 
   - The component file is named after the component
 
