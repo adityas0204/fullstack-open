@@ -195,3 +195,113 @@ Inline styles and some of the other ways of adding styles to React components go
 The philosophy of React is, in fact, the polar opposite of this. Since the separation of CSS, HTML, and JavaScript into separate files did not seem to scale well in larger applications, React bases the division of the application along the lines of its logical functional entities.
 
 The structural units that make up the application's functional entities are React components. A React component defines the HTML for structuring the content, the JavaScript functions for determining functionality, and also the component's styling; all in one place. This is to create individual components that are as independent and reusable as possible.
+
+### Couple of important remarks
+
+This content is worth reading
+
+- Initially, state `notes` is set to empty array
+  - `const [notes, setNotes] = useState([])` 
+- Since the state stores only one thing, an array, more appropriate initial value is `null`
+  - `const [notes, setNotes] = useState(null)`
+- This will cause an error in our app where we try to use the `map` method to display the notes
+  - The error occurs because the effect is only executed after the first render, so `notes` maintains its `null` value and `map` breaks
+- When `notes` is initialized to an empty array, there is no error since `map` can be called on an empty array
+  - This masks the issue that data has not been fetched from the server before the first render
+- We can use _conditional rendering_ to ensure that on the first render nothing is rendered since notes will be null
+  - After the data is fetched the site will be completely rendered again:
+
+```jsx
+const App = () => {
+
+  const [notes, setNotes] = useState(null)
+  // ... 
+
+  useEffect(() => {
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
+      })
+  }, [])
+
+  // do not render anything if notes is still null
+
+  if (!notes) { 
+    return null 
+  }
+
+  // ...
+} 
+```
+
+- This method is good in cases where it is impossible to define the state so that the initial rendering is possible
+- Now, look at the second parameter  of the useEffect:
+
+```jsx
+useEffect(() => {
+  noteService
+    .getAll()
+    .then(initialNotes => {
+      setNotes(initialNotes)  
+    })
+
+}, [])
+```
+
+- `exchangerates` is an app that shows the exchange rates
+  - The UI is a form, which has an input field in which the name of the desired currency is written
+  - If the currency exists then it is compared to other currencies
+- The app sets the name of the currency to the state `currency` when the button is pressed
+  - When `currerncy` gets a new value, the app fetches its exchange rates from the API in the event function:
+
+```jsx
+const App = () => {
+  // ...
+  const [currency, setCurrency] = useState(null)
+
+  useEffect(() => {
+    console.log('effect run, currency is now', currency)
+
+    // skip if currency is not defined
+    if (currency) {
+      console.log('fetching exchange rates...')
+      axios
+        .get(`https://open.er-api.com/v6/latest/${currency}`)
+        .then(response => {
+          setRates(response.data.rates)
+        })
+    }
+  }, [currency])
+  // ...
+}
+```
+
+- `useEffect` hook has `[currency]` as second param
+  - So effect function is executed once after first rendering of site, and always after the state `currency` is changed
+- Choose `null` for initial value of `currency` since `currency` represents a single item
+  - `null` represents the state has nothing and it is easy to check if the state has been assigned yet
+  - The efect has a condition:
+
+```jsx
+if (currency) { 
+  // exchange rates are fetched
+}
+```
+
+- This prevents the effect from requesting exchange rates just after the first render when `currency` has initial `null` value
+- When the user enters a currency, Axios performs an HTTP GET request to https://open.er-api.com/v6/latest/eur 
+  - The response is stored in the `rates` state
+- This app could have been without using the useEffect function
+  - API is requested in the form submit handler function:
+
+```jsx
+const onSearch = (event) => {
+  event.preventDefault()
+  axios
+    .get(`https://open.er-api.com/v6/latest/${value}`)
+    .then(response => {
+      setRates(response.data.rates)
+    })
+}
+```
