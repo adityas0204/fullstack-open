@@ -43,8 +43,8 @@ addNote = event => {
 ```
 
 - Omit id property since it is better handled by the server
-  - Server auto generates id's
-- Object send to server using axious `post` method
+  - Server auto generates ids
+- Object sent to server using axios `post` method
   - Logged output:
 
 ![alt text](images/post-log.png)
@@ -54,7 +54,7 @@ addNote = event => {
 
 ![alt text](images/post-headers.png)
 
-- Axios automitically knew to set to appropriate value for _Content-type_ header due to out JS object
+- Axios automatically knew to set to appropriate value for _Content-type_ header due to our JS object
 - In _Network_ tab, after clicking on an event, the _Request_ tab shows the payload
   - The _Response_ tab shows what the server responded with
 - We can cause the note to be rendered to the screen now:
@@ -71,7 +71,7 @@ axios
 - We `concat` the response data
   - It is how we have always done it
 - When working with server, new problems will arise
-  - We will need new debugging strats and console logging
+  - We will need new debugging strategies and console logging
   - Need to have good understanding of JS runtime and React components
 - Can inspect state of backend server
   - Can be done through browser, ie. `http://localhost:3001/notes`
@@ -137,7 +137,7 @@ const App = () => {
 ```
 
 - Had to `toggleImportance={() => toggleImportanceOf(note.id)}` since `toggleImportanceOf()` takes a parameter
-- Every note has unique event handler since the id's are all unique
+- Every note has unique event handler since the ids are all unique
 - Can modify individual notes in JSON-server in two ways
   1. _replace_ the entire note with HTTP Put request
   2. or change some of note's properties with HTTP Patch request
@@ -167,7 +167,7 @@ const toggleImportanceOf = id => {
 ### Extracting Communication with the Backend into a Separate Module
 
 - To reduce bloating in _App_ component, extract communication into its own module
-- Creates _src/services_ folder and add file _notes.js_:
+- Create _src/services_ folder and add file _notes.js_:
 
 ```jsx
 import axios from 'axios'
@@ -244,8 +244,8 @@ const App = () => {
 }
 ```
 
-- _App_ component recieves entire response from HTTP requests
-  - Can be trimmed to only recieve the _response.data_ since that is all we use:
+- _App_ component receives entire response from HTTP requests
+  - Can be trimmed to only receive the _response.data_ since that is all we use:
 
 ```jsx
 import axios from 'axios'
@@ -388,13 +388,13 @@ const person = { name, age}
 ### Promises and Errors
 
 - Say a note has been deleted from the server, but still appears on the site for the user
-  - If the user tries to change that notes importance then there could be issues
+  - If the user tries to change that note's importance then there could be issues
   - This would result in the server responding to our HTTP PUT request with a status code 404 _not found_ 
   - The console will display an error
 - The app should handle these errors seamlessly
   - User won't know about error unless they look in console
   - They will see that importance of note unable to change  
-- Our code doesn't handling a _rejected_ promise
+- Our code doesn't handle a _rejected_ promise
   - Handled by either providing `then` method with second callback function, or more commonly using the `catch` method
 - Event handler for rejected promise:
 
@@ -434,4 +434,4 @@ const toggleImportanceOf = id => {
 
 - An error message is shown, and the faulty note is removed from the notes state
   - note removed using `filter` method
-- We will learn better way to show messages to user later in the course
+- We will learn a better way to show messages to user later in the course

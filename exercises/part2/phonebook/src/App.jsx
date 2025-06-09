@@ -3,12 +3,16 @@ import contactServices from './services/contact'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
+
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [message, setMessage] = useState(null)
+  const [notificationColor, setNotificationColor] = useState('green')
 
   const hook = () => {
     contactServices
@@ -31,6 +35,12 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setNewFilter('')
+
+          setNotificationColor('green')
+          setMessage(`Added ${returnedContact.name}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
     } else {
       const person = persons.find((person) => person.name === newName)
@@ -40,22 +50,39 @@ const App = () => {
           .update(person.id, { ...person, number: newNumber })
           .then(updatedContact => {
             setPersons(persons.map(person => person.name === newName ? updatedContact : person))
-          setNewName('')
-          setNewNumber('')
-          setNewFilter('')
+            setNewName('')
+            setNewNumber('')
+            setNewFilter('')
+
+            setNotificationColor('green')
+            setMessage(`Changed ${updatedContact.name}'s number`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
+          .catch(error => {
+            setNotificationColor('red')
+            setMessage(`Information of ${person.name} has already been removed from the server`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+            setPersons(persons.filter(p => p.id !== person.id))
+            setNewName('')
+            setNewNumber('')
+            setNewFilter('')
           })
       }
     }
   }
 
   const deleteContact = (id) => {
-    const person = persons.find(person => person.id == id)
+    const person = persons.find(person => person.id === id)
 
     if (window.confirm(`Delete ${person.name}?`)) {
       contactServices
       .remove(id)
       .then(deletedContact => {
-        setPersons(persons.filter(person => person.id !== deletedContact.id))
+        setPersons(persons.filter(person => person.id !== id))
       })
     }
   }
@@ -67,6 +94,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification color={notificationColor} message={message} />
 
       <Filter newFilter={newFilter} setNewFilter={setNewFilter}/>
 
