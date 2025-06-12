@@ -1,0 +1,2873 @@
+Note that this markdown file was made using
+
+```powershell
+Get-ChildItem -Recurse -Depth 1 -Filter *.md | Get-Content | Set-Content ..\combined.md
+```
+
+# [Fundamentals](https://fullstackopen.com/en/part0) ([Example app](https://github.com/mluukkai/example_app))
+
+In this part, we will familiarize ourselves with the practicalities of taking the course. After that, we will have an overview of the basics of web development and also talk about the advances in web application development during the last few decades.
+
+### Reminders
+1. Open the developer console (ctrl shift i)
+2. Open _network tab_
+3. Check _disable cache_
+4. _Preserve log_ can be useful (preserves logs after reloading site)
+5. _Hide extension URLs_ can be useful (hides requests of any extensions installed in the browser)
+
+### Developer Console
+- _Network_ tab
+  - Shows requests made to server
+  - Expand a request for more information
+    - _Headers_ tab shows general information such as the request method (GET), status, scheme, content-type and more
+    - _Response_ tab shows the response data ie. a regular HTML page
+    - Can use this information to determine sequence of events:
+- _Console_ tab
+  - `console.log` will display things in the console
+  - Can use to access DOM notes, such as `document`
+  - Can manipulate the page from the console (not permanent)
+- _Elements/Inspector_ tab
+  - Shows treelike HTML structure
+  - Can be used to change style of elements (not permanent)
+
+### Traditional Web Apps
+- Static files are HTML documents in your server that ouline the structure and textual context of page
+- Server can also form pages dynamically using the application's code ie. from a database
+- Nowadays, the browser onle fetches HTML data from server, and all app logic is on server
+
+### Event Handlers & Callback Functions
+- Event handlers, as the name suggests, handle certain events by invoking a function
+- Event handler functions are called callback functions, meaning the function is invoked by the runtime environment (the browser) at an appropriate time when the event has occured
+
+### Document Object Model (DOM)
+- DOM is an Application Programming Interface (API) that lets programmatic changes of treelike HTML structure of webpage
+  - ie. adding a list of notes to a page by creating a new node using `ul` and then adding children to it using `li`
+- Root node of DOM tree of HTML document is called `document` object
+
+### CSS
+- _Head_ element in HTML contains link tag, which tells browser to fetch CSS style sheet from address 
+  - Attrbutes can be examined in _Inspector/Elements_ tab
+- Class selectors are used to select parts of page and style them
+- Classes are attributes 
+
+### HTML 
+- Classes are for CSS
+- IDs are for JavaScript
+
+### Single Page App (SPA) 
+- Fetches only one HTML page from server, the contents of which are manipulated with JavaScript that executes in the browser
+# [Introduction to React](https://fullstackopen.com/en/part1/introduction_to_react)
+
+We will now start getting familiar with probably the most important topic of this course, namely the React library. Let's start by making a simple React application as well as getting to know the core concepts of React.
+
+We will use Vite, which can quickly make a React app. It is a frontend development tool, dont know much yet. It has automatic compiling
+
+### Reminders
+1. Always have the developer console open
+
+### Components
+- Basic UI building blocks in React
+  - Follows OOP model 
+  - All content that needs to be rendered is done so with components in React
+  - **Always have ```export default App```**
+
+```jsx
+const App = () => (
+  <div>
+    <p>Hello world</p>
+  </div>
+)
+```
+
+- Component is technically a JS function
+  - JSX file allows us to do this
+  - Component's variable names must be capitalized
+  - ```const App = ()``` assigns the constant variable App to function with no params
+  - ```() => {}``` is used to define the [arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+  - Function returns the value of the expression after ```=>```
+  - It can contain any JS code
+  - Components need to have atleast one root element
+    - ie. an outermost `<div>` element
+    - The root component can contain fragments instead to avoid "extra" div element
+      - ie. `<> blah blah blah </>`
+
+```jsx
+const App = () => {
+  const now = new Date()
+  const a = 10
+  const b = 20
+  console.log(now, a+b)
+
+  return (
+    <div>
+      <p>Hello world, it is {now.toString()}</p>
+      <p>
+        {a} plus {b} is {a + b}
+      </p>
+    </div>
+  )
+}
+```
+
+- Can also render dynamic content in component
+  - Any JS in expression is evaluated and result is embedded in defined place in HTML
+<br>
+- You can define multuple components in a single file
+  - One component can call another in its expression
+  - Components should be specialized and reuseable, similar to classes in Python
+<br> 
+- There is a _root component_ called _App_ at the top of the component tree  
+
+### JSX
+- Layout of React components written in JSX 
+  - Looks similar to HTML, but it is a way to write JS, and gets converted into JS after compiling
+- JSX is "XML-like" meaning every tag needs to be closed
+  - ```<Hello />```
+
+### Props: passing data to components
+- Props are used to pass data to components
+
+```jsx
+const Hello = (props) => {
+  return (
+    <div>
+      <p>Hello {props.name}</p>
+    </div>
+  )
+}
+```
+
+- Values for props can be hard-coded, or they can be results of JS expressions
+  - If prop value achieved through JS, then it must be wrapped in curly braces
+
+# [JavaScript](https://fullstackopen.com/en/part1/java_script)
+
+JavaScript is essential for React. JavaScript has advanced rapidly in the last few years and in this course, we use features from the newer versions. The official name of the JavaScript standard is ECMAScript. 
+
+Browsers don't yet support all of JS's newest features, so a lot of code run in browsers has been transpiled from a newer version of JavaScript to an older, more compatible version.
+
+Today, the most popular way to do transpiling is by using Babel. Transpilation is automatically configured in React applications created with Vite. 
+
+Node.js is a JavaScript runtime environment based on Google's Chrome V8 JavaScript engine and works practically anywhere - from servers to mobile phones. Let's practice writing some JavaScript using Node. The latest versions of Node already understand the latest versions of JavaScript, so the code does not need to be transpiled.
+
+The code is written into files ending with .js that are run by issuing the command node name_of_file.js
+
+### Variables 
+```js
+const x = 1
+let y = 5
+
+console.log(x, y)   // 1 5 are printed
+y += 10
+console.log(x, y)   // 1 15 are printed
+y = 'sometext'
+console.log(x, y)   // 1 sometext are printed
+x = 4               // causes an error
+```
+
+- `let` defines a normal variable
+    - `const` defines a _constant_ variable
+- Variable's datatype can change
+    - JS is dynamically typed
+
+### Arrays
+
+```jsx
+const t = [1, -1, 3]
+
+t.push(5)
+
+console.log(t.length) // 4 is printed
+console.log(t[1])     // -1 is printed
+
+t.forEach(value => {
+  console.log(value)  // numbers 1, -1, 3, 5 are printed, each on its own line
+})                   
+```
+
+- Variable assigned to const can not be reassigned, but contents of object it references can be modified
+    - "Change the furniture, but the address of the house stays the same"
+- Can iterate through array using `forEach`
+    - behaves like lambda function from Python
+    - `forEach` receives function defined using arrow syntax as param
+- The method `push` adds item to array
+- For React, we want to stick to immutable data structures paradigm, so prefer method `concat` to create new array with added element:
+
+```jsx
+const t = [1, -1, 3]
+
+const t2 = t.concat(5)  // creates new array
+
+console.log(t)  // [1, -1, 3] is printed
+console.log(t2) // [1, -1, 3, 5] is printed
+```
+
+- Map creates a new array after applying the function given as a param to the old array:
+
+```jsx
+const t = [1, 2, 3]
+
+const m1 = t.map(value => value * 2)
+console.log(m1)   // [2, 4, 6] is printed
+```
+```jsx
+const m2 = t.map(value => '<li>' + value + '</li>')
+console.log(m2)  
+// [ '<li>1</li>', '<li>2</li>', '<li>3</li>' ] is printed
+```
+
+- Array of numbers is converted into array of HTML strings 
+    - Map used frequently in React
+
+- Destructuring assignment used to assign elements of array to variables:
+
+```jsx
+const t = [1, 2, 3, 4, 5]
+
+const [first, second, ...rest] = t
+
+console.log(first, second)  // 1 2 is printed
+console.log(rest)          // [3, 4, 5] is printed
+```
+
+### Objects (Dictionary)
+
+- Common way to define objects by using object literals 
+  - List properties within braces:
+
+```jsx
+const object1 = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+}
+
+const object2 = {
+  name: 'Full Stack web application development',
+  level: 'intermediate studies',
+  size: 5,
+}
+
+const object3 = {
+  name: {
+    first: 'Dan',
+    last: 'Abramov',
+  },
+  grades: [2, 3, 5, 3],
+  department: 'Stanford University',
+}
+```
+
+- Properties of objects can be referenced using "dot" notation or brackets
+
+```jsx
+console.log(object1.name)         // Arto Hellas is printed
+const fieldName = 'age'
+console.log(object1[fieldName])    // 35 is printed
+```
+
+- Properties can be added or manipulated in a similar fashion
+
+### Functions
+
+- Arrow method: 
+
+```jsx
+const sum = (p1, p2) => {
+  console.log(p1)
+  console.log(p2)
+  return p1 + p2
+}
+```
+
+- For single param you can remove brackets:
+
+```jsx
+const square = p => {
+  console.log(p)
+  return p * p
+}
+```
+
+- Can be further reduced to the following if we remove console call:
+  - The single expression is also returned
+
+```jsx
+const square = p => p * p
+```
+
+```jsx
+const t = [1, 2, 3]
+const tSquared = t.map(p => p * p)
+// tSquared is now [1, 4, 9]
+```
+
+### Object methods and "this" 
+
+This section is not relevant to the course due to the use of React Hooks, but is good to know.
+
+- Objects have a _this_ keyword which refers to itself: 
+
+```jsx
+const arto = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+
+  greet: function() {
+    console.log('hello, my name is ' + this.name)
+  },
+}
+
+arto.greet()  // "hello, my name is Arto Hellas" gets printed
+```
+
+- Methods can also be assigned after object creation:
+
+```jsx
+const arto = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+  greet: function() {
+    console.log('hello, my name is ' + this.name)
+  },
+}
+
+
+arto.growOlder = function() {
+  this.age += 1
+}
+
+console.log(arto.age)   // 35 is printed
+arto.growOlder()
+console.log(arto.age)   // 36 is printed
+```
+
+```jsx
+arto.greet()       // "hello, my name is Arto Hellas" gets printed
+
+const referenceToGreet = arto.greet
+referenceToGreet() // prints "hello, my name is undefined"
+```
+
+- A _method reference_ can be stored in a variable, which will call the method through the variable
+  - However, if this is done, then the method loses knowledge of what the original `this` was
+  - Calling the method through a reference causes the value of `this` to become the global object, which causes unexpected errors
+
+### Classes
+
+- JS doesn't have classes, but we can simulate them 
+  - Here is the syntax for a Person class:
+
+```jsx
+class Person {
+  constructor(name, age) {
+    this.name = name
+    this.age = age
+  }
+  greet() {
+    console.log('hello, my name is ' + this.name)
+  }
+}
+
+const adam = new Person('Adam Ondra', 29)
+adam.greet()
+
+const janja = new Person('Janja Garnbret', 23)
+janja.greet()
+```
+
+- Classes are essentially objects
+- This course does not use classes heavily, since we use Hooks
+
+# [Component state, event handlers](https://fullstackopen.com/en/part1/component_state_event_handlers)
+
+Example code:
+
+```jsx
+const Hello = (props) => {
+  return (
+    <div>
+      <p>
+        Hello {props.name}, you are {props.age} years old
+      </p>
+    </div>
+  )
+}
+
+const App = () => {
+  const name = 'Peter'
+  const age = 10
+
+  return (
+    <div>
+      <h1>Greetings</h1>
+      <Hello name="Maya" age={26 + 10} />
+      <Hello name={name} age={age} />
+    </div>
+  )
+}
+```
+
+### Component helper functions
+
+- Can put a function in a component
+    - Do not need params for helper function since it has access to all props in component:
+
+```jsx
+const Hello = (props) => {
+
+  const bornYear = () => {
+    const yearNow = new Date().getFullYear()
+    return yearNow - props.age
+  }
+
+  return (
+    <div>
+      <p>
+        Hello {props.name}, you are {props.age} years old
+      </p>
+
+      <p>So you were probably born in {bornYear()}</p>
+    </div>
+  )
+}
+```
+
+### Destructuring
+
+- Destructuring allows us to streamline our component by assigning values of the props directly into variables
+  - Here is an example without destructuring
+
+```jsx
+const name = props.name 
+const age = props.age
+```
+
+- Here is an example that uses destructuring:
+
+```jsx
+const { name, age } = props
+```
+
+- If object that is getting destructured has values as shown below, then expression `const { name, age } = props` assigns values 'Arto Hellas' to name and 35 to age
+
+```jsx
+props = {
+  name: 'Arto Hellas',
+  age: 35,
+}
+```
+
+- It can be taken a step further by destructuring the props that are passed directly into variables:
+
+```jsx
+const Hello = ({ name, age }) => {}
+```
+
+### Page re-rendering
+
+- Re-rendering means the page can change after the initial rendering
+  - ie. a button can be clicked that updates a counter
+
+_App.jsx_:
+```jsx
+const App = (props) => {
+  const {counter} = props
+  return (
+    <div>{counter}</div>
+  )
+}
+
+export default App
+```
+
+_main.jsx_:
+```jsx
+import ReactDOM from 'react-dom/client'
+
+import App from './App'
+
+let counter = 1
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+const refresh = () => {
+  root.render(
+    <App counter={counter} />
+  )
+}
+
+refresh()
+counter += 1
+refresh()
+counter += 1
+refresh()
+```
+
+- By calling `render` we can re-render the page with an updated counter
+  - This is not recommended though
+
+### Stateful components
+
+- We can add states to components so that they can change during the lifecycle of the component
+  - Done using React's state hooks
+
+_main.jsx_:
+```jsx
+import ReactDOM from 'react-dom/client'
+
+import App from './App'
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+```
+
+_App.jsx_:
+```jsx
+import { useState } from 'react'
+
+const App = () => {
+
+  const [ counter, setCounter ] = useState(0)
+
+  setTimeout(
+    () => setCounter(counter + 1),
+    1000
+  )
+
+  return (
+    <div>{counter}</div>
+  )
+}
+
+export default App
+```
+
+- `import { useState } from 'react'` imports the `useState` function
+- `const [ counter, setCounter ] = useState(0)` is a function call that adds state to the component
+  - `useState(0)` returns an array, whose elements are assigned to `counter` and `setCounter`
+  - `counter` is assigned the initial value of the `state` which is 0
+  - `setCounter` is assigned a function used to _modify the state_
+- The `setTimeout` function is used to execute code after a certain amount of time
+  - It is given a function to increment the counter state and a timeout of one second
+- `setCounter` is a state modifying function
+  - When called _React re-renders the component_, which means that the function body of the component gets re-executed:
+
+```jsx
+() => {
+
+  const [ counter, setCounter ] = useState(0)
+
+  setTimeout(
+    () => setCounter(counter + 1),
+    1000
+  )
+
+  return (
+    <div>{counter}</div>
+  )
+}
+```
+
+- Component function is executed again
+  - It calls `useState`, which uses current state (which is `counter`), which is 1
+    - [After first render](https://react.dev/reference/react/useState#parameters), `useState` uses the current state, not the parameter provided
+  - A new function call is made to `setTimeout`, which executes the one-second timeout and increments the `counter` state again to 2
+  - The old value of `counter` - 1 - is rendered to the screen
+  - Every time `setCounter` modifies the state it causes the component to re-render
+  - This will run indefinitely
+- You can add a debugging statement: `console.log('rendering...', counter)`
+
+### Event handlers
+
+- These are registered to be called when specific events occur
+  - For example, when a button is clicked
+- We can register an event handler function to the _click_ event as so:
+
+```jsx
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const handleClick = () => {
+    console.log('clicked')
+  }
+
+  return (
+    <div>
+      <div>{counter}</div>
+
+      <button onClick={handleClick}>
+        plus
+      </button>
+    </div>
+  )
+}
+``` 
+
+- The button's _onClick_ attribute references `handleClick` function
+  - When the _plus_ button is clicked, `handleClick` is called
+- We can change the event handler to the following to get the counter behavior:
+
+```jsx
+<button onClick={() => setCounter(counter + 1)}>
+  plus
+</button>
+```
+
+### An event handler is a function
+
+- If we tried to define the event handlers in a simpler format, then our application would not work:
+
+```jsx
+<button onClick={setCounter(counter + 1)}> 
+  plus
+</button>
+```
+
+- This is because an event handler is supposed to be either a _function_ or a _function reference_
+- Good practice is to define event handlers outside of the JSX-templates:
+
+```jsx
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const increaseByOne = () => setCounter(counter + 1)
+  
+  const setToZero = () => setCounter(0)
+
+  return (
+    <div>
+      <div>{counter}</div>
+
+      <button onClick={increaseByOne}>
+        plus
+      </button>
+
+      <button onClick={setToZero}>
+        zero
+      </button>
+    </div>
+  )
+}
+```
+
+### Passing state - to child components
+
+- Recommended to use small and reusable React components
+  - We will break our components up 
+- [Lifting states up](https://react.dev/learn/sharing-state-between-components) in the component hierarchy is good practice
+  - So, put app's state in _App_ component and pass it to _Display_ component through _props_:
+
+```jsx
+const Display = (props) => {
+  return (
+    <div>{props.counter}</div>
+  )
+}
+```
+
+- This component is easy to integrate and use:
+
+```jsx
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const increaseByOne = () => setCounter(counter + 1)
+  const setToZero = () => setCounter(0)
+
+  return (
+    <div>
+
+      <Display counter={counter}/>
+      <button onClick={increaseByOne}>
+        plus
+      </button>
+      <button onClick={setToZero}> 
+        zero
+      </button>
+    </div>
+  )
+}
+```
+
+- Now make _Button_ component for buttons:
+
+```jsx
+const Button = (props) => {
+  return (
+    <button onClick = {props.onClick}>
+      {props.text}
+    </button>
+  )
+}
+```
+
+- Integrating the new buttons into our _App_ component:
+
+```jsx
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const increaseByOne = () => setCounter(counter + 1)
+  const decreaseByOne = () => setCounter(counter - 1)
+  const setToZero = () => setCounter(0)
+
+  return (
+    <div>
+      <Display counter = {counter}/>
+      <Button 
+      onClick = {increaseByOne}
+      text = 'plus'
+      />
+      <Button 
+      onClick = {setToZero}
+      text = 'zero'
+      />
+      <Button 
+      onClick = {decreaseByOne}
+      text = 'minus'
+      />
+    </div>
+  )
+}
+```
+
+- In React it is good practice to "use 'onSomething' names for props which take functions which handle events and handleSomething for the actual function definitions which handle those events"
+
+### Refactoring the components
+
+- We can make the components easier to read through refactoring:
+
+```jsx
+const Display = ({counter}) => <div> {counter} </div>
+```
+```jsx
+const Button = ({onClick, text}) => <button onClick = {onClick}> {text} </button>
+```
+# [A more complex state, debugging React apps](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps)
+
+### Complex state
+
+- For more complex states we can use `useState` multiple times to create separate pieces of state
+
+```jsx
+const [left, setLeft] = useState(0)
+const [right, setRight] = useState(0)
+```
+
+- We would also need two functions, `setLeft` and `setRight`, to update the state 
+- We can also achieve this complex state by putting left and right into a single object:
+
+```jsx
+{
+    left: 0,
+    right: 0
+}
+```
+
+- The application would look as so:
+
+```jsx
+const App = () => {
+  const [clicks, setClicks] = useState({
+    left: 0, right: 0
+  })
+
+  const handleLeftClick = () => {
+    const newClicks = { 
+      left: clicks.left + 1, 
+      right: clicks.right 
+    }
+    setClicks(newClicks)
+  }
+
+  const handleRightClick = () => {
+    const newClicks = { 
+      left: clicks.left, 
+      right: clicks.right + 1 
+    }
+    setClicks(newClicks)
+  }
+
+  return (
+    <div>
+      {clicks.left}
+      <button onClick={handleLeftClick}>left</button>
+      <button onClick={handleRightClick}>right</button>
+      {clicks.right}
+    </div>
+  )
+}
+```
+
+- The event handler creates a new object, adjusts value of the appropriate side and creates a copy of the other side:
+
+```jsx
+const handleLeftClick = () => {
+  const newClicks = { 
+    left: clicks.left + 1, 
+    right: clicks.right 
+  }
+  setClicks(newClicks)
+}
+```
+
+- This is done because we should never manipulate state itself, but always do it through the `setState` function provided
+- This can look prettier with object spread syntax:
+
+```jsx
+const handleLeftClick = () => {
+  const newClicks = { 
+    ...clicks, 
+    left: clicks.left + 1 
+  }
+  setClicks(newClicks)
+}
+```
+
+- `...clicks` creates a new object that has copies of all the properties of the original object, then we manipulate the value of `clicks.left`
+- Assigning the new object to a variable is not necessary:
+
+```jsx
+const handleLeftClick = () => 
+    setClicks({...clicks, left: clicks.left + 1})
+```
+
+### Handling arrays
+
+- `allClicks` will remember every click that has occurred
+
+```jsx
+const App = () => {
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
+  const [allClicks, setAll] = useState([])
+
+  const handleLeftClick = () => {
+    setAll(allClicks.concat('L'))
+    setLeft(left + 1)
+  }
+
+  const handleRightClick = () => {
+    setAll(allClicks.concat('R'))
+    setRight(right + 1)
+  }
+
+  return (
+    <div>
+      {left}
+      <button onClick={handleLeftClick}>left</button>
+      <button onClick={handleRightClick}>right</button>
+      {right}
+      <p>{allClicks.join(' ')}</p>
+    </div>
+  )
+}
+```
+
+- Every click is stored in a separate piece of state called `allClicks` which is initialized as an empty array
+  - When _left_ button clicked, letter _L_ is concatenated to `allClicks` 
+  - `.concat()` method returns a copy of the array, so we are not mutating original state
+  - Do not use `.push()` since it mutates the original state, "which can lead to problems that are very hard to debug"
+- `.join()` method joins all items in list into a single string
+
+### Update of the state is asynchronous
+
+- Add state that keeps track of total button presses:
+
+```jsx
+const App = () => {
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
+  const [allClicks, setAll] = useState([])
+  const [total, setTotal] = useState(0)
+
+  const handleLeftClick = () => {
+    setAll(allClicks.concat('L'))
+    setLeft(left + 1)
+    setTotal(left + right)
+  }
+
+  const handleRightClick = () => {
+    setAll(allClicks.concat('R'))
+    setRight(right + 1)
+    setTotal(left + right)
+  }
+
+  return (
+    <div>
+      {left}
+      <button onClick={handleLeftClick}>left</button>
+      <button onClick={handleRightClick}>right</button>
+      {right}
+      <p>{allClicks.join(' ')}</p>
+      <p>total {total}</p>
+    </div>
+  )
+}
+```
+
+- The total displayed is always one less than what it should be
+  - This is due to state updates happening asynchronously, meaning not immediately but at "some point" before the component is rendered again
+
+```jsx 
+const handleLeftClick = () => {
+  setAll(allClicks.concat('L'))
+  const updatedLeft = left + 1  // store state in variable 
+  setLeft(updatedLeft)
+  setTotal(updatedLeft + right) 
+}
+```
+
+### Conditional rendering
+
+- Rendering of click history is handled by new _History_ component:
+
+```jsx
+const History = (props) => {
+  if (props.allClicks.length === 0) {
+    return <div> the app is used by pressing the buttons </div>
+  }
+  return <div> button press history: {props.allClicks.join(' ')} </div>
+}
+
+const App = () => {
+  // ...
+
+  return (
+    <div>
+      {left}
+      <button onClick={handleLeftClick}>left</button>
+      <button onClick={handleRightClick}>right</button>
+      {right}
+      <History allClicks={allClicks} />
+    </div>
+  )
+}
+```
+
+- The _History_ component will render one div element if no buttons have been pressed, or another div element that displays the history
+  - This is called _conditional rendering_
+
+### Debugging React applications
+
+- Have the console and code open at the same time at all times
+- Put `console.log(props)` in components if there is a problem
+  - Can also do `console.log('props value is', props)`
+  - Make component less compact, therefore making it more readable:
+
+```jsx
+const Button = (props) => { 
+
+  console.log(props)
+  const { onClick, text } = props
+  return (
+    <button onClick={onClick}>
+      {text}
+    </button>
+  )
+}
+```
+
+- Can also use debugger 
+  - LEARN THE DEBUGGER FOR FIREFOX 
+- Use `Components` tab provided by React developer tools extension for Firefox
+  - It shows props and hooks
+
+### Rules of Hooks
+
+- There are a few [rules](https://react.dev/warnings/invalid-hook-call-warning#breaking-rules-of-hooks)
+  - "Hooks may only be called from the inside of a function body that defines a React component"
+  - Hooks start with the word `use` 
+  - They should not be called from the inside of a loop, conditional expression, or any other place that is not a function defining a component
+
+```jsx
+const App = () => {
+  // these are ok
+  const [age, setAge] = useState(0)
+  const [name, setName] = useState('Juha Tauriainen')
+
+  if ( age > 10 ) {
+    // this does not work!
+    const [foobar, setFoobar] = useState(null)
+  }
+
+  for ( let i = 0; i < age; i++ ) {
+    // also this is not good
+    const [rightWay, setRightWay] = useState(false)
+  }
+
+  const notGood = () => {
+    // and this is also illegal
+    const [x, setX] = useState(-1000)
+  }
+
+  return (
+    //...
+  )
+}
+```
+
+### Event Handling Revisited
+
+- Example:
+
+```jsx
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  return (
+    <div>
+      {value}
+      <button>reset to zero</button>
+    </div>
+  )
+}
+```
+
+- Button should reset state of `value` to 0
+  - Must use _event handler_ to make button react to a click event
+- Event handlers must always be functions or references to functions
+  - If it is not a function, then it will get run when the component is being rendered, not only when the button is clicked
+- Here are examples of incorrect event handlers:
+
+```jsx
+<button onClick="crap...">button</button>
+```
+```jsx
+<button onClick={value + 1}>button</button>
+```
+```jsx
+<button onClick={value = 0}>button</button>
+```
+```jsx
+<button onClick={console.log('clicked the button')}>
+  button
+</button>
+```
+```jsx
+<button onClick={setValue(0)}>button</button>
+```
+
+- This following example works due to the use of arrow function:
+
+```jsx
+<button onClick={() => console.log('clicked the button')}>
+  button
+</button>
+```
+
+- When the component gets rendered, no function gets called and only the reference to the arrow function is set to the event handler
+  - Calling the function only happens when the button is clicked
+- We can use this to reset the state:
+
+```jsx
+<button onClick={() => setValue(0)}>button</button>
+```
+
+- Best practice is to define event handlers in a separate place, and make a function reference:
+
+```jsx
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const handleClick = () =>
+    console.log('clicked the button')
+
+  return (
+    <div>
+      {value}
+      <button onClick={handleClick}>button</button>
+    </div>
+  )
+}
+```
+
+### A function that returns a function
+
+- Another way to define event handler is _a function that returns a function_
+- Make this change to code:
+
+```jsx
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const hello = () => {
+    const handler = () => console.log('hello world')
+    return handler
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={hello()}>button</button>
+    </div>
+  )
+}
+```
+
+- The event handler is set to the function call: 
+
+```jsx
+<button onClick={hello()}>button</button>
+```
+
+- When the component renders, hello evaluates to `<button onClick={hello()}>button</button>`
+  - Which gets evaluated to `<button onClick={() => console.log('hello world')}>button</button>`
+- It is important to know the distinction between `handleClick` and `handleClick()` 
+  - `handleClick` is a reference to the function, which is what an event handler is looking for
+  - `handleClick()` is a function call, which gets executed immediately
+  - Because we cannot use function calls in our event handlers, we cannot normally use parameters for our functions
+- This is why we need to use functions that return functions
+  - This enables us to use parameters in our functions:
+
+```jsx
+const App = () => {
+  const [value, setValue] = useState(10)
+  
+  const setToValue = (newValue) => () => {
+    console.log('value now', newValue)  // print the new value to console
+    setValue(newValue)
+  }
+  
+  return (
+    <div>
+      {value}
+      <button onClick={setToValue(1000)}>thousand</button>
+      <button onClick={setToValue(0)}>reset</button>
+      <button onClick={setToValue(value + 1)}>increment</button>
+    </div>
+  )
+}
+```
+
+- Functions that return functions are not necessary for this functionality
+  - But it is better practice compared to this:
+
+```jsx
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const setToValue = (newValue) => {
+    console.log('value now', newValue)
+    setValue(newValue)
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={() => setToValue(1000)}>
+        thousand
+      </button>
+      <button onClick={() => setToValue(0)}>
+        reset
+      </button>
+      <button onClick={() => setToValue(value + 1)}>
+        increment
+      </button>
+    </div>
+  )
+}
+```
+
+### Passing Event Handlers to Child Components
+
+- As we have seen previously:
+
+```jsx
+const Button = (props) => (
+  <button onClick={props.onClick}>
+    {props.text}
+  </button>
+)
+```
+```jsx
+const App = (props) => {
+  // ...
+  return (
+    <div>
+      {value}
+
+      <Button onClick={() => setToValue(1000)} text="thousand" />
+      <Button onClick={() => setToValue(0)} text="reset" />
+      <Button onClick={() => setToValue(value + 1)} text="increment" />
+    </div>
+  )
+}
+```
+
+### Reminder: Do not define Components within Components
+# [Rendering a collection, modules](https://fullstackopen.com/en/part2/rendering_a_collection_modules)
+
+### Reminders
+- Use `console.log()` often to debug
+  - In VS Code I have made a snippet which easily creates `console.log()` when `clog` is typed 
+
+### JS Arrays
+- [Functional Programming Review](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84)
+  - [Higher-order functions](https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84), [Map](https://www.youtube.com/watch?v=bCqtb-Z5YGQ&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84&index=2), [Reduce basics](https://www.youtube.com/watch?v=Wl98eZpkp-c&t=31s)
+
+### Rendering Collections
+
+- This relates to the 'frontend', or the browser side application logic
+- Now we will focus on a new application
+  - _App.jsx_ and _main.jsx_ can be found in _rendering_
+- Every note in `notes` has some information about it
+  - We render it using `<li>{notes[1].content}</li>` since notes has exactly three notes
+- Another way to render it is using the map function:
+
+```jsx
+notes.map(note => <li>{note.content}</li>)
+```
+
+- This generates an array of `li` elements:
+
+```jsx
+[
+  <li>HTML is easy</li>,
+  <li>Browser can execute only JavaScript</li>,
+  <li>GET and POST are the most important methods of HTTP protocol</li>,
+]
+```
+
+- This can be easily placed inside of the `ul` tags:
+
+```jsx
+<ul> 
+  {notes.map(note => <li>{note.content}</li>)}      
+</ul>
+
+// can also be written as following for readability
+<ul>
+  {notes.map(note => 
+    <li> 
+      {note.content} 
+    </li>        
+  )}
+</ul>
+```
+
+- This works because React will appropriately render a list of tags
+
+### Key-attribute
+
+- Each child in a list should have a unique key value
+  - When we are doing our `map` method shenanigans we need to include the key:
+
+```jsx
+<ul>
+  {notes.map(note => 
+    <li key={note.id}>
+      {note.content}
+    </li>
+  )}
+</ul>
+```
+
+- Map is a simple function to use that is important to create view elements
+
+### Anti-pattern: Array Indexes as Keys
+
+- The index of an element can be retrieved when using `map` by doing:
+
+```jsx
+<ul>
+  {notes.map((note, i) => 
+    <li key={i}>
+      {note.content}
+    </li>
+  )}
+</ul>
+```
+
+- `i` is the index, but this method is not recommended since it can lead to more problems later
+
+### Refactoring Modules
+
+- We can also split displaying a single note into its own component _Note_ 
+  - This means that the _key_ attribute must be defined for the _Note_ component, and not for the `li` tag as before
+  - This is because the _key_ attribute must go to the top level element returned by `map`, so the key goes on the _Note_ component here
+
+```jsx
+const Note = ({ note }) => <li>{note.content}</li>
+
+const App = ({ notes }) => {
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map(note => 
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+    </div>
+  )
+}
+```
+
+- It is common practice to declare each component in its own file as an _ES6-module_
+- First two lines import two modules:
+
+```jsx
+import ReactDOM from "react-dom/client"
+import App from "./App"
+```
+
+- The module _react-dom/_ is placed into the variable `ReactDOM`
+- The module _./App_ is placed into the variable `App`
+- Let's make _Note_ component its own module
+- In small projects, component modules are put in a directory called _components_ in the src folder 
+  - The component file is named after the component
+
+```jsx
+const Note = ({ note }) => {
+  return (
+    <li>{note.content}</li>
+  )
+}
+
+export default Note
+```
+
+- The last line exports the component _Note_
+- To import, the location is relative to the file importing
+  - `import Note from "./components/Note"`
+
+### When the Application Breaks
+
+- React can have errors:
+![alt text](images/react-errors.png)
+
+- Best method to fix issues is using `console.log`
+  - Start from the root component, and slowly put more logs deeper into component or function that is causing bugs  
+  - Bugs can happen due to props being of different type
+# [Forms](https://fullstackopen.com/en/part2/forms)
+
+This section will be done using the example _Notes_ app 
+
+### Saving the notes in the component state
+
+- To update page when notes are added, we will save notes to the _App's_ component state
+  - Use `useState` function to do this
+  - Initialize with initial notes array passed through props
+    - Usually we initialize with empty array or object
+
+```jsx 
+import { useState } from 'react'
+import Note from './components/Note'
+
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map(note => 
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+    </div>
+  )
+}
+```
+
+- Using React developer tools you can see the hooks state 
+- Now, we can make a form for submitting a new note and an event handler
+  - Notice that our event handler has an _event_ parameter 
+  - The _event_ parameter is passed automatically into our function by the browser
+  - It contains important information regarding 
+    - What element triggered the event
+    - What type of event it was
+    - Any data associated with it (e.g. key pressed, mouse position)
+    - And importantly: methods to control the default behavior (like `preventDefault()`)
+
+```jsx
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+
+  const addNote = (event) => {
+    event.preventDefault()
+    console.log('button clicked', event.target)
+  }
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map(note => 
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+
+      <form onSubmit={addNote}>
+        <input />
+        <button type="submit">save</button>
+      </form>   
+    </div>
+  )
+}
+```
+
+- When the 'submit' button is pressed, the `addNote` event handler is called 
+- Event handler calls `event.preventDefault`
+  - This prevents default action of submitting form
+    - Default action does [many things](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event) including reloading the page
+- Target of the event is stored in `event.target`
+- Now we need to access data in form's _input_ element
+
+### Controlled Component
+
+- This is [one method](https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable) to access the data
+- `newNote` can be a new piece of state to store the input
+  - It can be set at the _input_ element's _value_ attribute:
+
+```jsx
+const [newNote, setNewNote] = useState('a new note...') 
+
+<input value={newNote} />
+```
+
+- We assigned a piece of _App_ component's state as the _value_ attribute of the input, so the _App_ component controls it
+  - The input can not be edited by the user
+  - To enable editing, we need to register an _event handler_ that synchronizes changes to the state and input:
+
+```jsx
+const handleNoteChange = (event) => {
+  console.log(event.target.value)
+  setNewNote(event.target.value)
+}
+
+<input
+  value={newNote}
+  onChange={handleNoteChange}
+/>
+```
+
+- Event handler called every time input element is changed
+  - `target` value is the value of the element
+- Here is what happens step by step:
+  1. User types a letter (e.g., types "a").
+  2. `onChange` fires and captures the event.
+  3. `event.target.value` contains the updated input value (e.g., "a").
+  4. `setNewNote` updates React state: `newNote = "a"`.
+  5. React re-renders the component.
+  6. `<input value={newNote}/>` uses the new value from state ("a").
+  7. The user sees the character appear.
+
+- Now finish off `addNote` function:
+
+```jsx
+const addNote = (event) => {
+  event.preventDefault()
+  const noteObject = {
+    content: newNote,
+    important: Math.random() < 0.5,
+    id: String(notes.length + 1),
+  }
+
+  setNotes(notes.concat(noteObject))
+  setNewNote('')
+}
+```
+
+- Every note is an object that has content, 50% chance to be important and an ID
+  - Concat _noteObject_ to the state _notes_ because concat creates copy of the array with the new item added 
+- Event handler also resets value of _newNote_ to `''`
+
+### Filtering Displayed Elements
+
+- `showAll` is a state that keeps track of which notes to display:
+
+```jsx
+const [showAll, setShowAll] = useState(true)
+```
+
+- We can create a list, `notesToShow` that contains all the notes that need to be displayed
+  - The items in the list depend on the `showAll` state:
+
+```jsx
+import { useState } from 'react'
+import Note from './components/Note'
+
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+  const [newNote, setNewNote] = useState('') 
+  const [showAll, setShowAll] = useState(true)
+
+  // ...
+
+  const notesToShow = showAll
+    ? notes
+    : notes.filter(note => note.important === true)
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notesToShow.map(note =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+      // ...
+    </div>
+  )
+}
+```
+
+- Conditional operator is used 
+  - `const result = condition ? val1 : val2`
+- `filter` method filters for important notes only
+  - Higher order function
+  - Can be reduced to `notes.filter(note => note.important)` since importance is true or false
+- Add button to toggle `showAll` state 
+
+```jsx
+<div>
+  <button onClick={() => setShowAll(!showAll)}>
+    show {showAll ? 'important' : 'all'}
+  </button>
+</div>
+```
+
+- Clicking button flips `showAll` state
+  - Text uses conditional operator
+# [Getting data from server](https://fullstackopen.com/en/part2/getting_data_from_server)
+
+For a while now we have only been working on "frontend", i.e. client-side (browser) functionality. We will begin working on "backend", i.e. server-side functionality in the third part of this course. Nonetheless, we will now take a step in that direction by familiarizing ourselves with how the code executing in the browser communicates with the backend.
+
+Let's use a tool meant to be used during software development called [JSON Server](https://github.com/typicode/json-server?tab=readme-ov-file) to act as our server.
+
+- Create _db.json_ file in root directory of _notes_ project
+  - Content:
+
+```json
+{
+  "notes": [
+    {
+      "id": "1",
+      "content": "HTML is easy",
+      "important": true
+    },
+    {
+      "id": "2",
+      "content": "Browser can execute only JavaScript",
+      "important": false
+    },
+    {
+      "id": "3",
+      "content": "GET and POST are the most important methods of HTTP protocol",
+      "important": true
+    }
+  ]
+}
+```
+
+- Run command to start server: `npx json-server --port 3001 db.json`
+- From now on, we will save notes to server, and recieve them from the server to render
+  - It is like having "memory"
+- In real world, databases are used, but JSON Server is nice for small apps
+
+### The browser as a runtime environment
+
+- Need to fetch notes from address http://localhost:3001/notes to React app
+  - Can be done using fetch method, based on promises
+- JavaScript uses an asynchronous model for most I/O operations  
+- This means I/O functions like network requests or file reads are non-blocking
+  - Code execution continues immediately after calling an async function  
+  - When the operation finishes, the event handler callback is called
+- JavaScript engines in browsers and Node.js run in a single thread
+  - Only one task can execute at a time  
+  - Blocking operations like waiting for a response would freeze the entire app  
+  - To prevent this, I/O must be non-blocking and asynchronous
+- Summary
+  - JavaScript continues running while waiting for I/O to finish  
+  - The result of the async task is handled later via callback, promise, or async/await  
+  - This design is necessary to keep the UI responsive and the event loop unblocked
+- Analogy: Ordering Food
+  - Synchronous  
+    - You order food  
+    - You stand and wait doing nothing until it’s ready  
+  - Asynchronous  
+    - You order food  
+    - You go back to your table  
+    - The waiter brings the food when it’s ready  
+- JavaScript behaves like the asynchronous model
+- Code Comparison
+  - Synchronous blocking
+
+  ```js
+  const data = fetchData() // blocks  
+  console.log(data)        // waits for fetchData to finish  
+  ```
+
+  - Asynchronous non-blocking
+
+  ```js
+  fetchData().then(data => {
+   console.log(data)      // runs later
+  })
+  console.log("Fetching...") // runs immediately
+  ```
+
+	| Feature               | Synchronous Blocking        | Asynchronous Non-blocking JS |
+	|----------------------|-----------------------------|-------------------------------|
+	| Thread behavior      | Waits for each task to finish | Moves on immediately         |
+	| I/O operations       | Block further code          | Run in background             |
+	| UI responsiveness    | Can freeze the UI           | Keeps UI responsive           |
+	| Example languages    | Java, Python default        | JavaScript, Node.js           |
+	| Callback/event model | Not needed                  | Required to handle later results |
+
+### npm
+
+- To get data from server we can use promise-based function fetch
+  - Using [axios](https://github.com/axios/axios) instead 
+  - It is similar to fetch
+- External libraries are called _npm packages_ for React projects
+  - Most JS projects defined using not package manager
+  - _package.json_ contains information for all libraries and dependencies
+- We can install axios by running the command in cmd: 
+
+```
+npm install axios
+```
+
+- Axios is listed under dependencies in _package.json_
+  - The code was also downloaded, and can be found in the _node module_ directory
+- Also install _jason-server_ as a development dependency
+  - This means it will only be used during development, not when app running in production
+
+```
+npm install json-server --save-dev
+```
+
+- Make an addition to the _scripts_ portion of _package.json_
+  - This will allow us to start the server easily using `npm run server`:
+
+```json
+"server": "json-server -p 3001 db.json"
+```
+
+- Many more dependencies will be used in the future
+
+### Axios and promises
+
+- Libraries brough into use by calling `import`
+- Added following code to _main.jsx_:
+
+```jsx
+import axios from 'axios'
+
+const promise = axios.get('http://localhost:3001/notes')
+console.log(promise)
+
+const promise2 = axios.get('http://localhost:3001/foobar')
+console.log(promise2)
+```
+
+- Axios' `get` method returns a promise
+  - "A Promise is an object representing the eventual completion or failure of an asynchronous operation."
+  - So, promise is object that represents asynchronous operation
+  - It can have three states:
+    - _Pending_: asynch operation not done yet, so final value not available
+    - _Fulfilled_: asynch operation done, so final value available, which means success
+    - _Rejected_: error prevented final value from being determined, which means failure 
+- _console_ shows that first promise was _fulfilled_, so successful `axios.get()` request
+  - Second was _rejected_, and console gives us reason that HTTP GET request to non-existent address
+- To access result of operation represented by promise we use event handler
+  - Done through `then` method:
+
+```jsx
+const promise = axios.get('http://localhost:3001/notes')
+
+promise.then(response => {
+  console.log(response)
+})
+```
+
+- Output: 
+![alt text](images/successful-promise.png)
+
+- `then` method gets callback function with `response` object as param
+  - `response` object carries important returned data of HTTP GET request such as _data_, _status code_, and _headers_
+- Promise object generally not stores in variable, instead everything is done in one line:
+
+```jsx
+axios.get('http://localhost:3001/notes').then(response => {
+  const notes = response.data
+  console.log(notes)
+})
+```
+
+- Callback function stores data from `response` object and stores it in variable called notes
+- Better way to format chained method is to put then in separate line:
+
+```jsx
+axios
+  .get('http://localhost:3001/notes')
+  .then(response => {
+    const notes = response.data
+    console.log(notes)
+  })
+```
+
+- Data returned by server is plain text (one long string) which axios library can still parse
+  - Parses into JS array since server specifies that data format is _application/json_ (see previous image) using content type header
+- Now you can use the fetched data
+  - Typically the data is fetched in _App_ component
+
+### Effect-hooks
+
+- Effect hooks let component connect to and synchronize with external sysmtems like network, browser DOM and more
+  - These are what we will use to fetch data from server
+- Simplify _main.jsx_ since we will fetch from server:
+
+```jsx
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+```
+
+- Change _App_ component:
+
+```jsx
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import Note from './components/Note'
+
+const App = () => {
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(true)
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled')
+        setNotes(response.data)
+      })
+  }, [])
+  console.log('render', notes.length, 'notes')
+
+  // ...
+}
+```
+
+- The console logs tell us that its working:
+
+```
+render 0 notes
+effect
+promise fulfilled
+render 3 notes
+```
+
+- _App_ component first run
+  - `useEffect` registered but function inside not yet run
+  - Component is rendered to virtual DOM and all JSX and state is evaluated
+- Now that intial render is done, commit phase occur
+  - React updates real DOM 
+  - React will run the function inside of `useEffect`
+    - This is intended to prevent slowing down updates
+    - Its also for side effects, not computing what the UI will look like
+- This is why 'render 0' is printer to console, followed by logs from within `useEffect` function 
+  - When function inside gets executed, `axios.get` starts fetching data from server and registers following function as an _event handler_ for the operation:
+
+```jsx
+response => {
+  console.log('promise fulfilled')
+  setNotes(response.data)
+}
+```
+
+- When the data arrives from the server, the registered _event handler_ is called 
+  - It prints 'promise fulfilled' 
+  - Data is stored into notes state using `setNotes(response.data)`
+  - Calling a state updating function causes a re-render, which displays the notes
+  - This re-render doesn't cause `useEffect` to register again because its dependency array is empty
+    - When something in the dependency array changes, React will execute the function in `useEffect`
+    - ie. if dependency array was `[notes]` then the _App_ component would be stuck in an infinite loop 
+- The code can be rewritten:
+
+```jsx
+const hook = () => {
+  console.log('effect')
+  axios
+    .get('http://localhost:3001/notes')
+    .then(response => {
+      console.log('promise fulfilled')
+      setNotes(response.data)
+    })
+}
+
+useEffect(hook, [])
+```
+
+- `useEffect` takes two params
+  1. A function, the effect itself
+      > _By default, effects run after every completed render, but you can choose to fire it only when certain values have changed._
+  2. Dependency array which specifies how often effect should be run
+      - We wanted effect to run after first render only, so we left dependency array empty
+      - If no dependency array is provided, then the default action occurs
+- The code could also have been written as follows:
+
+```jsx
+useEffect(() => {
+  console.log('effect')
+
+  const eventHandler = response => {
+    console.log('promise fulfilled')
+    setNotes(response.data)
+  }
+
+  const promise = axios.get('http://localhost:3001/notes')
+  promise.then(eventHandler)
+}, [])
+```
+
+- Next we will store new notes on the server
+
+### The development runtime environment
+
+- Review time
+  - Following image describes makeup of app:
+
+![alt text](images/app-makeup.png)
+
+- JS for our app runs on browser, which it gets from the _React dev server_ 
+  - That server runs when we run the command `npm run dev`
+  - Server tranforms JS into browser understood format 
+  - Server stiches together JS from many different files into one file
+  - Will be further discussed in Part 7 
+- React app on browser gets JSON data from JSON Server running on port 3001 on the machine
+  - The server we query the data from (JSON Server) gets its data from db.json
+- Currently, everything resides on software developer's machine
+  - This is called localhost
+  - This will change when app is deployed to internet in Part 3
+- 
+# [Altering data in server](https://fullstackopen.com/en/part2/altering_data_in_server)
+
+When creating notes in our application, we would naturally want to store them in some backend server. The json-server package claims to be a so-called REST or RESTful API in its documentation:
+
+    Get a full fake REST API with zero coding in less than 30 seconds (seriously)
+
+The json-server does not exactly match the description provided by the textbook definition of a REST API, but neither do most other APIs claiming to be RESTful.
+
+We will take a closer look at REST in the next part of the course. But it's important to familiarize ourselves at this point with some of the conventions used by json-server and REST APIs in general. In particular, we will be taking a look at the conventional use of routes, aka URLs and HTTP request types, in REST.
+
+### REST
+
+- In REST individual objects, such as notes, are resources
+  - Every resource has unique address in form of URL
+  - JSON Server convention is individual note address is at _notes/3_ where the notes ID is 3 and _notes_ URL is list of all notes
+- Resources fetched from server using HTTP GET request 
+  - HTTP GET to _notes/3_ URL returns note with ID: 3
+  - HTTP GET to _notes_ URL returns list of all notes
+- Creating new resource done using HTTP POST request 
+  -  For new note, send request to _notes_ URL that JSON server adheres to
+  -  Data for new note resource stored in _body_ of request
+-  Sending data to JSON Server requires JSON format
+   -  Data must be a correctly formatted string and request contains _Content-type_ request header with value _application/json_ 
+
+### Sending Data to the Server
+
+- Change _addNote_ event handler:
+
+```jsx
+addNote = event => {
+  event.preventDefault()
+  const noteObject = {
+    content: newNote,
+    important: Math.random() < 0.5,
+  }
+
+  axios
+    .post('http://localhost:3001/notes', noteObject)
+    .then(response => {
+      console.log(response)
+    })
+}
+```
+
+- Omit id property since it is better handled by the server
+  - Server auto generates ids
+- Object sent to server using axios `post` method
+  - Logged output:
+
+![alt text](images/post-log.png)
+
+- New note resource stored under _data_ property of `response` object 
+- Headers for POST request are correct:
+
+![alt text](images/post-headers.png)
+
+- Axios automatically knew to set to appropriate value for _Content-type_ header due to our JS object
+- In _Network_ tab, after clicking on an event, the _Request_ tab shows the payload
+  - The _Response_ tab shows what the server responded with
+- We can cause the note to be rendered to the screen now:
+
+```jsx
+axios
+  .post('http://localhost:3001/notes', noteObject)
+  .then(response => {
+    setNotes(notes.concat(response.data));
+    setNewNote('');
+  });
+```
+
+- We `concat` the response data
+  - It is how we have always done it
+- When working with server, new problems will arise
+  - We will need new debugging strategies and console logging
+  - Need to have good understanding of JS runtime and React components
+- Can inspect state of backend server
+  - Can be done through browser, ie. `http://localhost:3001/notes`
+- This is discussed further in the next part
+
+### Changing the Importance of Notes
+
+- Add button to every note to toggle importance
+- New _Note_ component:
+
+```jsx
+const Note = ({ note, toggleImportance }) => {
+  const label = note.important
+    ? 'make not important' : 'make important'
+
+  return (
+    <li>
+      {note.content} 
+      <button onClick={toggleImportance}>{label}</button>
+    </li>
+  )
+}
+```
+
+- This adds a button with event handler `toggleImportance` to every note
+- Test it:
+
+```jsx
+const App = () => {
+  const [notes, setNotes] = useState([]) 
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(true)
+
+  // ...
+
+  const toggleImportanceOf = (id) => {
+    console.log(`importance of ${id} needs to be toggled`)
+  }
+
+  // ...
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <div>
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? 'important' : 'all' }
+        </button>
+      </div>      
+      <ul>
+        {notesToShow.map(note => 
+          <Note
+            key={note.id}
+            note={note} 
+            toggleImportance={() => toggleImportanceOf(note.id)}
+          />
+        )}
+      </ul>
+      // ...
+    </div>
+  )
+}
+```
+
+- Had to `toggleImportance={() => toggleImportanceOf(note.id)}` since `toggleImportanceOf()` takes a parameter
+- Every note has unique event handler since the ids are all unique
+- Can modify individual notes in JSON-server in two ways
+  1. _replace_ the entire note with HTTP Put request
+  2. or change some of note's properties with HTTP Patch request
+
+```jsx
+const toggleImportanceOf = id => {
+  const url = `http://localhost:3001/notes/${id}`
+  const note = notes.find(n => n.id === id)
+  const changedNote = { ...note, important: !note.important }
+
+  axios.put(url, changedNote).then(response => {
+    setNotes(notes.map(note => note.id === id ? response.data : note))
+  })
+}
+```
+
+- First line defines unique URL for note based on id
+- `find()` method returns first object that matches condition and stores it in `note` var
+- Next, an exact copy of the note is created
+  - But the value of `important` is flipped
+  - We do not directly manipulate value of notes since it is state, that is why we create a temporary value 
+  - `changedNote` is a shallow copy, so the values are the same; however, if the values of the old object were objects, then the copied values in the new object would reference the same objects that were in the old object
+- New note sent to server via PUT request, causing it to replace the old note at URL
+- Callback function updates `notes` state by keeping all previous items, except for the old note which gets replaced by the updated version
+  - This is done using `map`, which returns a new array that has the map applied to it
+
+### Extracting Communication with the Backend into a Separate Module
+
+- To reduce bloating in _App_ component, extract communication into its own module
+- Create _src/services_ folder and add file _notes.js_:
+
+```jsx
+import axios from 'axios'
+const baseUrl = 'http://localhost:3001/notes'
+
+const getAll = () => {
+  return axios.get(baseUrl)
+}
+
+const create = newObject => {
+  return axios.post(baseUrl, newObject)
+}
+
+const update = (id, newObject) => {
+  return axios.put(`${baseUrl}/${id}`, newObject)
+}
+
+export default { 
+  getAll: getAll, 
+  create: create, 
+  update: update 
+}
+```
+
+- Module returns object with three functions: `getAll`, `create`, and `update`
+  - Return promises made by axios methods
+- _App_ component `imports` module:
+
+```jsx
+import noteService from './services/notes'
+```
+
+- `noteService` can be used:
+
+```jsx
+const App = () => {
+  // ...
+
+  useEffect(() => {
+    noteService
+      .getAll()
+      .then(response => {
+        setNotes(response.data)
+      })
+  }, [])
+
+  const toggleImportanceOf = id => {
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+
+    noteService
+      .update(id, changedNote)
+      .then(response => {
+        setNotes(notes.map(note => note.id === id ? response.data : note))
+      })
+  }
+
+  const addNote = (event) => {
+    event.preventDefault()
+    const noteObject = {
+      content: newNote,
+      important: Math.random() > 0.5
+    }
+
+    noteService
+      .create(noteObject)
+      .then(response => {
+        setNotes(notes.concat(response.data))
+        setNewNote('')
+      })
+  }
+
+  // ...
+}
+```
+
+- _App_ component receives entire response from HTTP requests
+  - Can be trimmed to only receive the _response.data_ since that is all we use:
+
+```jsx
+import axios from 'axios'
+const baseUrl = 'http://localhost:3001/notes'
+
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
+}
+
+const create = newObject => {
+  const request = axios.post(baseUrl, newObject)
+  return request.then(response => response.data)
+}
+
+const update = (id, newObject) => {
+  const request = axios.put(`${baseUrl}/${id}`, newObject)
+  return request.then(response => response.data)
+}
+
+export default { 
+  getAll: getAll, 
+  create: create, 
+  update: update 
+}
+```
+
+- Instead of returning the promise, we assign a var to the promise `request` 
+  - Then call `then` on promise and return `response.data`
+  - This is compact expression of:
+
+```jsx
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => {
+    return response.data
+  })
+}
+```
+
+- `getAll()` still returns a promise since `then` method of promise also returns a promise
+  - When `then` is called on the returned promise, it will be returning `response.data`
+- Update _App_ component to use response data directly:
+
+```jsx
+const App = () => {
+  // ...
+
+  useEffect(() => {
+    noteService
+      .getAll()
+
+      .then(initialNotes => {
+        setNotes(initialNotes)
+      })
+  }, [])
+
+  const toggleImportanceOf = id => {
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+
+    noteService
+      .update(id, changedNote)
+
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id === id ? returnedNote : note))
+      })
+  }
+
+  const addNote = (event) => {
+    event.preventDefault()
+    const noteObject = {
+      content: newNote,
+      important: Math.random() > 0.5
+    }
+
+    noteService
+      .create(noteObject)
+
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
+        setNewNote('')
+      })
+  }
+
+  // ...
+}
+```
+
+- This uses promise chaining, and you can learn more about it [here](https://javascript.info/promise-chaining)
+
+### Cleaner Syntax for Defining Object Literals
+
+- The module exports the following objects:
+
+```jsx
+{ 
+  getAll: getAll, 
+  create: create, 
+  update: update 
+}
+```
+
+- Since the _keys_ of the object have the same name as the _values_, we can rewrite it as follows:
+
+```jsx
+{ getAll, create, update }
+
+// or 
+
+{ 
+  getAll, 
+  create, 
+  update 
+}
+```
+
+- To demonstrate this, say we have variables with values:
+
+```jsx
+const name = 'Leevi'
+const age = 0
+```
+
+- In older versions of JS we would define object:
+
+```jsx
+const person = {
+  name: name,
+  age: age
+}
+```
+
+- Since _key_ and _value_ names are same, we can do:
+
+```jsx
+const person = { name, age}
+```
+
+### Promises and Errors
+
+- Say a note has been deleted from the server, but still appears on the site for the user
+  - If the user tries to change that note's importance then there could be issues
+  - This would result in the server responding to our HTTP PUT request with a status code 404 _not found_ 
+  - The console will display an error
+- The app should handle these errors seamlessly
+  - User won't know about error unless they look in console
+  - They will see that importance of note unable to change  
+- Our code doesn't handle a _rejected_ promise
+  - Handled by either providing `then` method with second callback function, or more commonly using the `catch` method
+- Event handler for rejected promise:
+
+```jsx
+axios
+  .get('http://example.com/probably_will_fail')
+  .then(response => {
+    console.log('success!')
+  })
+  .catch(error => {
+    console.log('fail')
+  })
+```
+
+- If promise fails, then event handler registered with `catch` gets called
+  - Generally, `catch` placed further down event chain
+  - `catch` can be used to define handler function at the end of a promise chain to catch _rejected_ thrown by any promise in chain
+- Can change _App_ component to error check:
+
+```jsx
+const toggleImportanceOf = id => {
+  const note = notes.find(n => n.id === id)
+  const changedNote = { ...note, important: !note.important }
+
+  noteService
+    .update(id, changedNote).then(returnedNote => {
+      setNotes(notes.map(note => note.id === id ? returnedNote : note))
+    })
+    .catch(error => {
+      alert(
+        `the note '${note.content}' was already deleted from server`
+      )
+      setNotes(notes.filter(n => n.id !== id))
+    })
+}
+```
+
+- An error message is shown, and the faulty note is removed from the notes state
+  - note removed using `filter` method
+- We will learn a better way to show messages to user later in the course
+# [Adding styles to React App](https://fullstackopen.com/en/part2/adding_styles_to_react_app)
+
+Let's take a look at how we can add styles to a React application. There are several different ways of doing this and we will take a look at the other methods later on. First, we will add CSS to our application the old-school way; in a single file without using a [CSS preprocessor](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor) (although this is not entirely true as we will learn later on).
+
+- Add _index.css_ file in _src_ directory
+  - Import into _main.jsx_:
+
+```jsx
+import './index.css'
+```
+
+- Add a rule to _index.css_:
+
+```css
+h1 {
+  color: green;
+  font-style: italic;
+}
+```
+
+- That is a rule
+  - They have _selectors_ and _declarations_ 
+    - Selectors define which element to apply rule to
+      - _h1_ header tags will get that rule
+    - Declarations give properties values
+      - `color` is given value of green
+- If we want to style the notes, then we can target the _li_ tags:
+
+```css
+li {
+  color: grey;
+  padding-top: 3px;
+  font-size: 15px;
+}
+```
+
+- Using element types is too general since it applies to all list elements for example
+- To be specific, use class selectors
+  - Have to define them first in HTML:
+
+```jsx
+<li class="note">some text...</li>
+```
+
+- Class selectors defined using `.classname` syntax in CSS:
+
+```css
+.note {
+  color: grey;
+  padding-top: 5px;
+  font-size: 15px;
+}
+```
+
+### Improved error message
+
+- Implement error message as component instead of `alert` method:
+
+```jsx
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
+```
+
+- If `message` prop is null, nothing happens
+  - Otherwise, the message gets rendered to the screen inside div element
+- Use _errorMessage_ state in _App_ component
+  - Initialize with message to test it
+
+```jsx
+const App = () => {
+  const [notes, setNotes] = useState([]) 
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
+
+  // ...
+
+  return (
+    <div>
+      <h1>Notes</h1>
+
+      <Notification message={errorMessage} />
+      <div>
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? 'important' : 'all' }
+        </button>
+      </div>      
+      // ...
+    </div>
+  )
+}
+```
+
+- Create style for error:
+
+```css
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+```
+
+- Now we can implement it in he function `toggleImportanceOf`:
+
+```jsx
+const toggleImportanceOf = id => {
+  const note = notes.find(n => n.id === id)
+  const changedNote = { ...note, important: !note.important }
+
+  noteService
+    .update(id, changedNote).then(returnedNote => {
+      setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+    })
+    .catch(error => {
+
+      setErrorMessage(
+        `Note '${note.content}' was already removed from server`
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      setNotes(notes.filter(n => n.id !== id))
+    })
+}
+```
+
+- When error, show error in epic way and set timer to remove error and fix what caused error
+
+### Inline styles
+
+- React lets you write styles directly into the code 
+  - The rules are different from a normal CSS file
+- Normally:
+
+```css
+{
+    color: green;
+    font-style: italic;
+}
+```
+
+- Inline-style: 
+
+```css
+{
+    color: 'green';
+    fontStyle: 'italic';
+}
+```
+
+- We can see some differences
+  - We use quotations around string values
+  - CSS uses kebab case for property names, while inline uses camel case
+
+- Create a _Footer_ component for _App_:
+
+```jsx
+const Footer = () => {
+  const footerStyle = {
+    color: 'green',
+    fontStyle: 'italic'
+  }
+
+  return (
+    <div style={footerStyle}>
+      <br />
+      <p>
+        Note app, Department of Computer Science, University of Helsinki 2025
+      </p>
+    </div>
+  )
+}
+
+export default Footer
+```
+
+Inline styles come with certain limitations. For instance, so-called [pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) can't be used straightforwardly.
+
+Inline styles and some of the other ways of adding styles to React components go completely against the grain of old conventions. Traditionally, it has been considered best practice to entirely separate CSS from the content (HTML) and functionality (JavaScript). According to this older school of thought, the goal was to write CSS, HTML, and JavaScript into their separate files.
+
+The philosophy of React is, in fact, the polar opposite of this. Since the separation of CSS, HTML, and JavaScript into separate files did not seem to scale well in larger applications, React bases the division of the application along the lines of its logical functional entities.
+
+The structural units that make up the application's functional entities are React components. A React component defines the HTML for structuring the content, the JavaScript functions for determining functionality, and also the component's styling; all in one place. This is to create individual components that are as independent and reusable as possible.
+
+### Couple of important remarks
+
+This content is worth reading
+
+- Initially, state `notes` is set to empty array
+  - `const [notes, setNotes] = useState([])` 
+- Since the state stores only one thing, an array, more appropriate initial value is `null`
+  - `const [notes, setNotes] = useState(null)`
+- This will cause an error in our app where we try to use the `map` method to display the notes
+  - The error occurs because the effect is only executed after the first render, so `notes` maintains its `null` value and `map` breaks
+- When `notes` is initialized to an empty array, there is no error since `map` can be called on an empty array
+  - This masks the issue that data has not been fetched from the server before the first render
+- We can use _conditional rendering_ to ensure that on the first render nothing is rendered since notes will be null
+  - After the data is fetched the site will be completely rendered again:
+
+```jsx
+const App = () => {
+
+  const [notes, setNotes] = useState(null)
+  // ... 
+
+  useEffect(() => {
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
+      })
+  }, [])
+
+  // do not render anything if notes is still null
+
+  if (!notes) { 
+    return null 
+  }
+
+  // ...
+} 
+```
+
+- This method is good in cases where it is impossible to define the state so that the initial rendering is possible
+- Now, look at the second parameter  of the useEffect:
+
+```jsx
+useEffect(() => {
+  noteService
+    .getAll()
+    .then(initialNotes => {
+      setNotes(initialNotes)  
+    })
+
+}, [])
+```
+
+- `exchangerates` is an app that shows the exchange rates
+  - The UI is a form, which has an input field in which the name of the desired currency is written
+  - If the currency exists then it is compared to other currencies
+- The app sets the name of the currency to the state `currency` when the button is pressed
+  - When `currerncy` gets a new value, the app fetches its exchange rates from the API in the event function:
+
+```jsx
+const App = () => {
+  // ...
+  const [currency, setCurrency] = useState(null)
+
+  useEffect(() => {
+    console.log('effect run, currency is now', currency)
+
+    // skip if currency is not defined
+    if (currency) {
+      console.log('fetching exchange rates...')
+      axios
+        .get(`https://open.er-api.com/v6/latest/${currency}`)
+        .then(response => {
+          setRates(response.data.rates)
+        })
+    }
+  }, [currency])
+  // ...
+}
+```
+
+- `useEffect` hook has `[currency]` as second param
+  - So effect function is executed once after first rendering of site, and always after the state `currency` is changed
+- Choose `null` for initial value of `currency` since `currency` represents a single item
+  - `null` represents the state has nothing and it is easy to check if the state has been assigned yet
+  - The efect has a condition:
+
+```jsx
+if (currency) { 
+  // exchange rates are fetched
+}
+```
+
+- This prevents the effect from requesting exchange rates just after the first render when `currency` has initial `null` value
+- When the user enters a currency, Axios performs an HTTP GET request to https://open.er-api.com/v6/latest/eur 
+  - The response is stored in the `rates` state
+- This app could have been without using the useEffect function
+  - API is requested in the form submit handler function:
+
+```jsx
+const onSearch = (event) => {
+  event.preventDefault()
+  axios
+    .get(`https://open.er-api.com/v6/latest/${value}`)
+    .then(response => {
+      setRates(response.data.rates)
+    })
+}
+```
+# [Node.js and Express](https://fullstackopen.com/en/part3/node_js_and_express)
+
+In this part, our focus shifts towards the backend: that is, towards implementing functionality on the server side of the stack.
+
+We will be building our backend on top of NodeJS, which is a JavaScript runtime based on Google's Chrome V8 JavaScript engine.
+
+As mentioned in part 1, browsers don't yet support the newest features of JavaScript, and that is why the code running in the browser must be transpiled with e.g. babel. The situation with JavaScript running in the backend is different. The newest version of Node supports a large majority of the latest features of JavaScript, so we can use the latest features without having to transpile our code.
+
+Our goal is to implement a backend that will work with the notes application from part 2. However, let's start with the basics by implementing a classic "hello world" application.
+
+We had already mentioned npm back in part 2, which is a tool used for managing JavaScript packages. In fact, npm originates from the Node ecosystem.
+
+- Create a directory for app
+  - I made _simpleapp_ 
+  - Navigate to the directory and create template for new app using `npm init` command
+  - Answer the questions and a _package.json_ file will be generated that contains info about the project:
+
+```json
+{
+  "name": "simpleapp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
+```
+
+- File specifies that entry point of app is _index.js_ file
+- Add a new script:
+
+```json
+{
+  // ...
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  // ...
+}
+```
+
+- Add an _index.js_ file at the root of the project
+  - Add some code:
+
+```js
+console.log('hello world')
+```
+
+- Run it:
+
+```bash
+node index.js
+```
+
+- Or run it using the script:
+
+```bash 
+npm start
+```
+
+- The script works since we defined it in the _package.json_ file
+  - It is normal to have npm scripts for executing taks for npm projects
+
+### Simple web server
+
+- Make app into web server by editting _index.js_:
+
+```js
+const http = require('http')
+
+const app = http.createServer((request, response) => {
+  response.writeHead(200, { 'Content-Type': 'text/plain' })
+  response.end('Hello World')
+})
+
+const PORT = 3001
+app.listen(PORT)
+console.log(`Server running on port ${PORT}`)
+```
+
+- Running the app prints to the console:
+
+```bash
+Server running on port 3001
+```
+
+- Open app in browser by navigating to http://localhost:3001/
+- The first line of code `const htpp = require('http')` imports Node's built in web server module
+  - This is different syntax for `import http from 'http` 
+  - Node.js uses CommonJS modules, which function almost exactly like ES6 modules but Node.js doesnt fully support ES6 modules yet
+- The next chunk of code:
+
+```js
+const app = http.createServer((request, response) => {
+  response.writeHead(200, { 'Content-Type': 'text/plain' })
+  response.end('Hello World')
+})
+```
+
+- `createServer` method of http module used to create a new web server
+- _event handler_ is registerd to the server
+  - It is called every time an HTTP request is made to the server's address http://localhost:3001/
+  - This means that whenever someone visits the site, that function is called
+- Request is responded to with status code 200
+  - _Content-Type_ header set to _text/plain_
+  - Content of site to be returned set to 'Hello World'
+  - This is because the server return plain text, which the browser will automatically want to display
+    - There are other content types that do other things, for example _text/html_ will render as HTML onto the browser 
+- Last lines of code bind the http server assigned to the `app` var, to listen to HTTP requests sent to port 3001
+- In this course backend server will offer raw JSON data to front end
+  - Change server to return hardocded list off notes in JSON format:
+
+```js
+const http = require('http')
+
+
+let notes = [
+  {
+    id: "1",
+    content: "HTML is easy",
+    important: true
+  },
+  {
+    id: "2",
+    content: "Browser can execute only JavaScript",
+    important: false
+  },
+  {
+    id: "3",
+    content: "GET and POST are the most important methods of HTTP protocol",
+    important: true
+  }
+]
+
+const app = http.createServer((request, response) => {
+  response.writeHead(200, { 'Content-Type': 'application/json' })
+  response.end(JSON.stringify(notes))
+})
+
+const PORT = 3001
+app.listen(PORT)
+console.log(`Server running on port ${PORT}`)
+```
+
+- Restart the server and refresh the browser
+- _Content-Type_ header is set to _application/json_, which informs the reciever (browser) that the data is in JSON format
+  - `notes` array is transformed into JSOn formatted string with `JSON.stringify(notes)` method
+    - This is neccessary since `response.end()` method expects a string or a buffer to send as the response body
+- The browser displays a format that is exactly the same as in part 2 where we created a json-server to serve notes:
+
+![alt text](images/json-server.png)
+
+### Express
+
+- This library makes server-side development easier
+  - Define it as a dependency:
+
+```bash
+npm install express
+```
+
+- It will get added to _package.json_
+- The source code for hte depenedency can be found in _node_modules_ directory
+  - It will contain the dependencies for express and all the dependencies for those dependencies
+    - These are called transitive dependencies
+- A caret can exist infront of the version number in _package.json_
+  - `"express": "^4.21.2`
+  - npm uses [semantic versioning](https://docs.npmjs.com/about-semantic-versioning), so the caret indicates that Express's version will be atleast 5.1.0
+- Dependencies can be updated by doing:
+
+```bash
+npm update
+```
+
+- If working on different computer, install all dependencies:
+
+```bash
+npm install
+```
+
+- The app should be backwards compatible as long as the _major_ number (number on the left end) is the same
+
+### Web and Express
+
+- Changes to _index.js_ and then restart server:
+
+```js
+const express = require('express')
+const app = express()
+
+let notes = [
+  ...
+]
+
+app.get('/', (request, response) => {
+  response.send('<h1>Hello World!</h1>')
+})
+
+app.get('/api/notes', (request, response) => {
+  response.json(notes)
+})
+
+const PORT = 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
+```
+
+- First, we import `express` 
+  - Its a _function_ that we used to create and Epxress app assigned to `app` var
+- Next, two routes to app are defined
+  1. First one defines an event handler that handles HTTP GET requests to the app's root
+  - The event handler takes two params
+    - The first is the request, which contains all info of the HTTP request
+    - The second response param is used to define how the request should be responded to 
+      - Request answered by using `send` method of `response` object
+      - This method causes server to respond to the HTTP request by sending a response that contains the string that was passed in the `send` method
+      - Param is a string, so Express automatically adjusts the _Content-Type_ header to be the _text/html_ one
+      - Status code of response defaults to 200
+      - This can be verified in the _dev tools_ console tab
+  2. Second one defines an event handler that handles HTTP GET requests made to the _notes_ path of the app
+     - Request responded with json method of `response` object
+     - This method _auto_ formats the to JSON formatted string
+     - Express _auto_ handles the _Content-Type_ header
+
+### Automatic Change Tracking
+
+- To see change we have to stop the app, and then restart it
+- Instead, you can make the server track changes using the `--watch` option:
+
+```bash
+node --watch index.js
+```
+
+- The browser still needs to be refreshed 
+- Make custom script to start development server with tracking:
+
+```js
+"dev": "node --watch index.js"
+```
+
+- Run it using:
+
+```bash
+npm run dev
+```
+
+- We have to use run here since `dev` isn't a built in script
+  - Start is an exception to this rule
+
+### REST
+
+- Update app to provide same RESTful HTTP API as json-server (what we used to use in part 2)
+
+>Representational State Transfer, aka REST, was introduced in 2000 in Roy Fielding's dissertation. REST is an architectural style meant for building scalable web applications. 
+
+- In REST, singular things, like notes, are called _resources_ 
+  - Every resource has an associated URL which is the reseource's unique address
+- A convention for unique address is combining the name of the resource type with the unique identifier
+  - Assume root URL of service is _www.exampleapp.com/api_
+  - If resource type is notes, then address of unique note 10 is _www.exampleapp.com/api/notes/10_ 
+  - URL for whole collection is _www.exampleapp.com/api/notes_
+- Different operation can be done on resources
+  - Operation depends on HTTP _verb_:
+
+| URL       | Verb   | Functionality                                                      |
+|-----------|--------|---------------------------------------------------------------------|
+| notes/10  | GET    | Fetches a single resource                                           |
+| notes     | GET    | Fetches all resources in the collection                             |
+| notes     | POST   | Creates a new resource based on the request data                    |
+| notes/10  | DELETE | Removes the identified resource                                     |
+| notes/10  | PUT    | Replaces the entire identified resource with the request data       |
+| notes/10  | PATCH  | Replaces a part of the identified resource with the request data    |
+
