@@ -477,3 +477,55 @@ app.post('/api/notes', (request, response) => {
   - Ensures a value is always assigned, even if the field is missing
 - Since our id's are stored as strings, we have to use map to convert them to numbers first
   - The spread syntax turns `Math.max(...[1, 2, 3])` into `Math.max(1, 2, 3)`
+
+### About HTTP request types
+
+- Request types have two important properties: safety and idempotency
+- An HTTP GET request should be safe
+  - This means that it does not cause any side effects on the server and only data is retrieved; the state of the database should not change
+  - Nothing guarantees a request to be safe, but it is a recommendation
+  - Safe also applies to HEAD
+- All HTTP requests should be idempotent (expcept for post)
+  - If a request does not generate side effects, then the result of the request should be the same no matter how many times the request is sent
+- POST is neither safe nor idempotent
+
+### Middleware
+
+- These are functions that hadle `request` and `response` objects
+- Express json-parser is middleware
+  - It takes in raw data from requests stored in `request` object, parses it into JS object and assigns it to `request` object as a new property `body`
+- Can use multiple middlewares
+  - They are called in the order they are listed in the code
+- Create middleware to print request info
+- Middleware function recieves 3 parameters:
+
+```js
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+```
+
+- At end of function, `next` function is called
+  - `next` yields control to the next middleware
+- Middleware is used like this:
+
+```js
+app.use(requestLogger)
+```
+
+- `json-parser` listed before `requestLogger` to initialize `request.body`
+- Middleware functions have to be used before routes
+  - Can be called after route is no route handler processes the HTTP request
+  - Make middleware to catch requests made to non-existent routes:
+
+```js
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+```
