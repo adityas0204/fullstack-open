@@ -93,5 +93,11 @@ app.listen(PORT, () => {
 - Connect a public repo
 - Define basic configs
   - If app is not at root of repo, then _Root directory_ needs to be given proper value:
+    - The app in question is the server that we had created:
 
 ![alt text](images/render-configs.png)
+
+- Go to the bottom and click _Deploy_ 
+- App will get deployed and it will inform you what the link is and the port:
+
+![alt text](images/render-logs.png)
