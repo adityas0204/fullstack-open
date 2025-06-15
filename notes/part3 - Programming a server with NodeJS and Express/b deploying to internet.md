@@ -101,3 +101,91 @@ app.listen(PORT, () => {
 - App will get deployed and it will inform you what the link is and the port:
 
 ![alt text](images/render-logs.png)
+
+- After pushing to your repo, you can redeploy the app:
+
+![alt text](images/render-redeploy.png)
+
+### Frontend production build
+
+-  We have been runinng React in _development mode_
+   -  App gives clear error logs, renders code immediately to browser, and so on
+-  When app is deployed, need to create a production build
+   -  Version of app is optomized for production
+-  Production build for Vite apps done with `npm run build`
+   -  Run in frontend of notes app from part 2
+-  A _dist_ directory is created
+   -  Contains _index.html_ file of our app and _assests_ directory
+   -  Minified versions of our app's JS code will be in _dist_ directory
+   -  Minified code is not readable
+-  
+
+### Serving static files from the backend
+
+- An option to deploy frontend is to copy the production build (_dist_ directory) to root of backend directory
+  - Then configure backend to show frontend's _main page_ (_dist/index.html_ file) as its main page
+- Start by copying production build (_dist_ directory) of frontend to root of backend:
+
+![alt text](images/production-build.png)
+
+- To make Express show _static content_ (page _index.html_ and JS), need to use built in middleware from Express called static:
+
+```js
+app.use(express.static('dist'))
+```
+
+ - When Express gets HTTP GET request, it will first check if _dist_ directory contains file corresponding to request's address 
+   - File returned if found
+ - "Now HTTP GET requests to the address www.serversaddress.com/index.html or www.serversaddress.com will show the React frontend. GET requests to the address www.serversaddress.com/api/notes will be handled by the backend code."
+ - Now, frontend and backend are at same address, so declare `baseUrl` as relative URL
+   - Leave out part declaring server:
+
+```js
+import axios from 'axios'
+
+const baseUrl = '/api/notes'
+
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
+}
+
+// ...
+```
+
+- After change, create new production build of frontend, copy it to root of backend
+- App can now be used from the _backend_ address http://localhost:3001/
+- When browser goes to address http://localhost:3001/, server returns _index.html_ file from _dist_ directory
+  - Contents of file:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+    <script type="module" crossorigin src="/assets/index-DvWJzEIY.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DdXI-Iuh.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+```
+
+- File has instructions to fetch CSS stylesheet, and one _script_ tag that instructs the browser to fetch the JS code of the app - the actual React app
+- React code fetches notes from the server address http://localhost:3001/api/notes and renders them to screen
+  - Browser-server communication can be seen in _Network tab_ of developer console
+- Setup for product deployment:
+
+![alt text](images/setup-deployment.png)
+
+- Everything in same node/express-backend that runs in localhost:3001
+  - This is unlike our developemt environment
+- When browser goes to page, _index.html_ is rendered
+- Which causes browser to fetch production version of React app
+- Once starting, it fetches the json-data from address localhost:3001/api/notes
+
+### The whole app to the internet
