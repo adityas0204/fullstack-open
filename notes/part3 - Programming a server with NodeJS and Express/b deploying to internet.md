@@ -189,3 +189,78 @@ const getAll = () => {
 - Once starting, it fetches the json-data from address localhost:3001/api/notes
 
 ### The whole app to the internet
+
+- Push the app to git and manual deploy on Render again
+  - The app now works
+- Everything is saved to a variable, if app restarts, then the data disappears
+  - We need a database
+- The setup of the app looks like the following:
+
+![alt text](images/render-deployment.png)
+
+- The backend resides in the Render server
+  - The browser executes the React app and fetches the json-data from the Render server
+
+### Streamlining deploying of the frontend
+
+- To reduce manual work when creating production build, reate npm-scripts in _package.json_ of backend repo
+- The script for Render is:
+
+```json
+{
+  "scripts": {
+    //...
+    "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+  }
+}
+```
+
+- "The script npm run build:ui builds the frontend and copies the production version under the backend repository. npm run deploy:full contains also the necessary git commands to update the backend repository"
+- "Note that the directory paths in the script build:ui depend on the location of the frontend and backend directories in the file system."
+
+### Proxy
+
+- Changes to the frontend cause it to not work in dev mode when using `npm run dev`
+  - Connection to backend is frayed since we use a relative URL:
+
+```js
+const baseUrl = '/api/notes'
+```
+
+- Frontend is at http://localhost:5173/
+  - So requests go to http://localhost:5173/api/notes
+  - But backend is at http://localhost:3001/
+- If project created using Vite, then add following to _vite.config.js_ file in frontend directory:
+
+```js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    }
+  },
+})
+```
+
+- React dev env acts as proxy
+  - If React code makes HTTP request to path starting with http://localhost:5173/api, then request forwarded to server at http://localhost:3001/
+- Frontend works in development mode and production build
+  - From frontend's perspective, all requests made to http://localhost:5173/, which is single origin, so no need for backend's cors middleware
+- Remove cors library and dependency:
+
+```bash 
+npm remove cors
+```
+
+- The app has been successfully deployed to the internet
+
