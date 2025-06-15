@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 
 app.use(express.json())
+app.use(express.static('dist'))
 
 morgan.token('body', (req) => {
 	if (req.body && Object.keys(req.body).length > 0) {
@@ -10,8 +11,6 @@ morgan.token('body', (req) => {
 	}
 	return ''
 })
-
-
 app.use(morgan('tiny :body'))
 
 persons = [
@@ -100,7 +99,7 @@ app.post('/api/persons', (request, response) => {
     response.json(person)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`listening to port ${PORT}`)
 })
