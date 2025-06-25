@@ -1,7 +1,7 @@
 # [Validation and ESLint](https://fullstackopen.com/en/part3/validation_and_es_lint)
 
 - Want constraints on data stored in db
-  - Dont want to add notes with empty _content_ property
+  - Don't want to add notes with empty _content_ property
   - Check note validity in route handler: 
 
 ```js
@@ -32,7 +32,7 @@ const noteSchema = new mongoose.Schema({
 ```
 
 - _minLength_ and _required_ validators are provided by Mongoose
-  - We can make custom validators if the built in one are not enough
+  - We can make custom validators if the built-in ones are not enough
 - If you try to store an invalid note, then operation will throw exception
   - Change code to pass exception to error handler middleware:
 
@@ -74,16 +74,16 @@ const errorHandler = (error, request, response, next) => {
 
 ### Deploying the database backend to production
 
-- Do not need to make another production build since we have only worked on the frontend
-- `dotenv` will not work if we are _production mode_ (ie Render)
-- For profcution, we have to set the db URL in the service that is hosting out app
+- Do not need to make another production build since we have only worked on the backend
+- `dotenv` will not work if we are in _production mode_ (i.e. Render)
+- For production, we have to set the db URL in the service that is hosting our app
   - This is the env var tab in Render
 
 ### [Lint](https://en.wikipedia.org/wiki/Lint_(software))
 
 > Generically, lint or a linter is any tool that detects and flags errors in programming languages, including stylistic errors. The term lint-like behavior is sometimes applied to the process of flagging suspicious language usage. Lint-like tools generally perform static analysis of source code.
 
-- Best static analysis ("linting") tool for JS is [ESlint](https://eslint.org/)
+- Best static analysis ("linting") tool for JS is [ESLint](https://eslint.org/)
 - Add as a _development dependency_ meaning it is not needed for production in the backend:
 
 ```bash
@@ -99,7 +99,7 @@ npm install eslint @eslint/js --save-dev
 }
 ```
 
-- Initialize default ESlint config with command:
+- Initialize default ESLint config with command:
 
 ```bash
 npx eslint --init
@@ -130,14 +130,14 @@ export default [
 ]
 ```
 
-- ESlint config file defines `file` option with `["*/.js"]` 
-  - This tells ESlint to look at all JS files 
+- ESLint config file defines `files` option with `["**/*.js"]` 
+  - This tells ESLint to look at all JS files 
 - `languageOptions` property specifies options related to language features that should be expected
   - Define `sourceType` option as "commonjs", which indicates that JS code in project uses CommonJS module system
-  - `globals` option specifies predefined gobal vars
-    - spread operator tells ESlint to include all global vars defined in `globals.node` settings such as `process` 
-  - `ecmaVersion` is set to latest, whihc sets the ECMAScript version to latest so ESlint knows to expect the latest JS syntax and features
-- Want to use [ESlint's recommended settings](https://eslint.org/docs/latest/use/configure/configuration-files#using-predefined-configurations) with ours
+  - `globals` option specifies predefined global vars
+    - spread operator tells ESLint to include all global vars defined in `globals.node` settings such as `process` 
+  - `ecmaVersion` is set to latest, which sets the ECMAScript version to latest so ESLint knows to expect the latest JS syntax and features
+- Want to use [ESLint's recommended settings](https://eslint.org/docs/latest/use/configure/configuration-files#using-predefined-configurations) with ours
   - `@eslint/js` package we installed provides us with predefined configs
   - We can import them:
 
@@ -184,7 +184,7 @@ export default [
 ]
 ```
 
-- Plugins extend ESlint capablities
+- Plugins extend ESLint capabilities
 - `@stylistic/eslint-plugin-js` adds JS stylistic rules 
   - Also indent, linebreak, quotes, and semicolons
 
@@ -213,7 +213,7 @@ npx eslint index.js
 ```
 
 - `npm run lint` will check every file in the project
-  - Files in the `dist` direcotyr will also get checked
+  - Files in the `dist` directory will also get checked
   - To avoid this, add an object with ignores property:
 
 ```mjs
@@ -231,11 +231,11 @@ export default [
 ]
 ```
 
-- Can use the VS Code ESlint plugin
+- Can use the VS Code ESLint plugin
 
 ### Adding More Style Rules
 
-- eqeqeq rules check if triple equality is used
+- eqeqeq rule checks if triple equality is used
   - Add it to config file:
 
 ```mjs
@@ -254,7 +254,7 @@ export default [
   - Require space before and after curly braces
   - Consistent use of white space in function params for arrow functions
 - Imported default config has many rules
-  - Includes rule that warns of `console.log` commands, which we dont want
+  - Includes rule that warns of `console.log` commands, which we don't want
   - Remove by defining its value as 0 or `off`:
 
 ```mjs
@@ -273,6 +273,5 @@ export default [
 ]
 ```
 
-- Can just use a ready-made config from someone else's project into yours
-  - [Airbnb JS style guide](https://github.com/airbnb/javascript) is popular
+- Can just use a ready-made config from someone else's project
 
