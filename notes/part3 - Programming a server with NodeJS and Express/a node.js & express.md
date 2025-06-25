@@ -63,11 +63,11 @@ npm start
 ```
 
 - The script works since we defined it in the _package.json_ file
-  - It is normal to have npm scripts for executing taks for npm projects
+  - It is normal to have npm scripts for executing tasks for npm projects
 
 ### Simple web server
 
-- Make app into web server by editting _index.js_:
+- Make app into web server by editing _index.js_:
 
 ```js
 const http = require('http')
@@ -89,9 +89,9 @@ Server running on port 3001
 ```
 
 - Open app in browser by navigating to http://localhost:3001/
-- The first line of code `const htpp = require('http')` imports Node's built in web server module
-  - This is different syntax for `import http from 'http` 
-  - Node.js uses CommonJS modules, which function almost exactly like ES6 modules but Node.js doesnt fully support ES6 modules yet
+- The first line of code `const http = require('http')` imports Node's built in web server module
+  - This is different syntax for `import http from 'http'` 
+  - Node.js uses CommonJS modules, which function almost exactly like ES6 modules but Node.js doesn't fully support ES6 modules yet
 - The next chunk of code:
 
 ```js
@@ -102,17 +102,17 @@ const app = http.createServer((request, response) => {
 ```
 
 - `createServer` method of http module used to create a new web server
-- _event handler_ is registerd to the server
+- _event handler_ is registered to the server
   - It is called every time an HTTP request is made to the server's address http://localhost:3001/
   - This means that whenever someone visits the site, that function is called
 - Request is responded to with status code 200
   - _Content-Type_ header set to _text/plain_
   - Content of site to be returned set to 'Hello World'
-  - This is because the server return plain text, which the browser will automatically want to display
+  - This is because the server returns plain text, which the browser will automatically want to display
     - There are other content types that do other things, for example _text/html_ will render as HTML onto the browser 
 - Last lines of code bind the http server assigned to the `app` var, to listen to HTTP requests sent to port 3001
 - In this course backend server will offer raw JSON data to front end
-  - Change server to return hardocded list off notes in JSON format:
+  - Change server to return hardcoded list of notes in JSON format:
 
 ```js
 const http = require('http')
@@ -147,9 +147,9 @@ console.log(`Server running on port ${PORT}`)
 ```
 
 - Restart the server and refresh the browser
-- _Content-Type_ header is set to _application/json_, which informs the reciever (browser) that the data is in JSON format
-  - `notes` array is transformed into JSOn formatted string with `JSON.stringify(notes)` method
-    - This is neccessary since `response.end()` method expects a string or a buffer to send as the response body
+- _Content-Type_ header is set to _application/json_, which informs the receiver (browser) that the data is in JSON format
+  - `notes` array is transformed into JSON formatted string with `JSON.stringify(notes)` method
+    - This is necessary since `response.end()` method expects a string or a buffer to send as the response body
 - The browser displays a format that is exactly the same as in part 2 where we created a json-server to serve notes:
 
 ![alt text](images/json-server.png)
@@ -164,12 +164,12 @@ npm install express
 ```
 
 - It will get added to _package.json_
-- The source code for hte depenedency can be found in _node_modules_ directory
+- The source code for the dependency can be found in _node_modules_ directory
   - It will contain the dependencies for express and all the dependencies for those dependencies
     - These are called transitive dependencies
-- A caret can exist infront of the version number in _package.json_
-  - `"express": "^4.21.2`
-  - npm uses [semantic versioning](https://docs.npmjs.com/about-semantic-versioning), so the caret indicates that Express's version will be atleast 5.1.0
+- A caret can exist in front of the version number in _package.json_
+  - `"express": "^4.21.2"`
+  - npm uses [semantic versioning](https://docs.npmjs.com/about-semantic-versioning), so the caret indicates that Express's version will be at least 4.21.2
 - Dependencies can be updated by doing:
 
 ```bash
@@ -211,7 +211,7 @@ app.listen(PORT, () => {
 ```
 
 - First, we import `express` 
-  - Its a _function_ that we used to create and Epxress app assigned to `app` var
+  - It's a _function_ that we use to create an Express app assigned to `app` var
 - Next, two routes to app are defined
   1. First one defines an event handler that handles HTTP GET requests to the app's root
   - The event handler takes two params
@@ -239,7 +239,7 @@ node --watch index.js
 - The browser still needs to be refreshed 
 - Make custom script to start development server with tracking:
 
-```js
+```json
 "dev": "node --watch index.js"
 ```
 
@@ -259,12 +259,12 @@ npm run dev
 >Representational State Transfer, aka REST, was introduced in 2000 in Roy Fielding's dissertation. REST is an architectural style meant for building scalable web applications.
 
 - In REST, singular things, like notes, are called _resources_ 
-  - Every resource has an associated URL which is the reseource's unique address
+  - Every resource has an associated URL which is the resource's unique address
 - A convention for unique address is combining the name of the resource type with the unique identifier
   - Assume root URL of service is _www.exampleapp.com/api_
   - If resource type is notes, then address of unique note 10 is _www.exampleapp.com/api/notes/10_ 
   - URL for whole collection is _www.exampleapp.com/api/notes_
-- Different operation can be done on resources
+- Different operations can be done on resources
   - Operation depends on HTTP _verb_:
 
 | URL       | Verb   | Functionality                                                      |
@@ -283,9 +283,9 @@ npm run dev
 - Add REST interface to operate on individual notes
   - First, create route for fetching single resource
 - Unique address will use an individual note's unique number 
-- Define paramters four routes using colon syntax in Express:
+- Define parameters for routes using colon syntax in Express:
 
-```jsx
+```js
 app.get('/api/notes/:id', (request, response) => {
   const id = request.params.id
   const note = notes.find(note => note.id === id)
@@ -297,8 +297,8 @@ app.get('/api/notes/:id', (request, response) => {
 - _id_ param accessed through request object's `params` method
 - The note is found using `find` 
   - It is returned in the response
-- If non existant note is requested, then HTTP status code 200 is returned, meaning success
-  - No data was sent back tho
+- If non-existent note is requested, then HTTP status code 200 is returned, meaning success
+  - No data was sent back though
   - This is due to `note` var being set to `undefined` if no match is found
   - The server needs to return status code 404 not found instead
 
@@ -378,7 +378,7 @@ app.post('/api/notes', (request, response) => {
 })
 ```
 
-- Event handler access data from body of `request` object
+- Event handler accesses data from body of `request` object
   - Without json-parser, _body_ property would be undefined
   - Parser takes JSON data, transforms it into JS object and attaches it to the _body_ property of `request` before handler is called
 - Verify it works with Postman
@@ -386,7 +386,7 @@ app.post('/api/notes', (request, response) => {
 - New test can be made in REST client file:
 
 ```rest
-POST http://localhost:3001/localhost:3001/api/notes/
+POST http://localhost:3001/api/notes/
 Content-Type: application/json
 
 {
@@ -432,7 +432,7 @@ app.post('/api/notes', (request, response) => {
 - Need unique id for note
   - First, get largest id number
   - Then create note from `request.body` 
-  - Add one to the largest id to determine new notes id
+  - Add one to the largest id to determine new note's id
     - Not recommended method
 - HTTP POST request can add notes with arbitrary properties
   - Make it so _content_ property of note can not be empty
@@ -442,9 +442,9 @@ app.post('/api/notes', (request, response) => {
 ```js
 const generateId = () => {
   const maxId = notes.length > 0 
-    ? Math.max(...notes.map(note => Number(n.id)))
+    ? Math.max(...notes.map(n => Number(n.id)))
     : 0
-  return String(madId + 1)
+  return String(maxId + 1)
 }
 
 app.post('/api/notes', (request, response) => {
@@ -470,12 +470,12 @@ app.post('/api/notes', (request, response) => {
 
 - Server responds to request with 400 bad request if no content provided
   - Notice that `return response.status(400).json({})` uses a return
-  - Return prevents rest of the code from being execute and a faulty note being added
+  - Return prevents rest of the code from being executed and a faulty note being added
 - The _important_ property is created in a particular way
   - Uses || to check if `body.important` is truthy; if not, it falls back to false
   - || returns the first truthy value from left to right
   - Ensures a value is always assigned, even if the field is missing
-- Since our id's are stored as strings, we have to use map to convert them to numbers first
+- Since our ids are stored as strings, we have to use map to convert them to numbers first
   - The spread syntax turns `Math.max(...[1, 2, 3])` into `Math.max(1, 2, 3)`
 
 ### About HTTP request types
@@ -485,19 +485,19 @@ app.post('/api/notes', (request, response) => {
   - This means that it does not cause any side effects on the server and only data is retrieved; the state of the database should not change
   - Nothing guarantees a request to be safe, but it is a recommendation
   - Safe also applies to HEAD
-- All HTTP requests should be idempotent (expcept for post)
+- All HTTP requests should be idempotent (except for post)
   - If a request does not generate side effects, then the result of the request should be the same no matter how many times the request is sent
 - POST is neither safe nor idempotent
 
 ### Middleware
 
-- These are functions that hadle `request` and `response` objects
+- These are functions that handle `request` and `response` objects
 - Express json-parser is middleware
   - It takes in raw data from requests stored in `request` object, parses it into JS object and assigns it to `request` object as a new property `body`
 - Can use multiple middlewares
   - They are called in the order they are listed in the code
 - Create middleware to print request info
-- Middleware function recieves 3 parameters:
+- Middleware function receives 3 parameters:
 
 ```js
 const requestLogger = (request, response, next) => {
@@ -519,7 +519,7 @@ app.use(requestLogger)
 
 - `json-parser` listed before `requestLogger` to initialize `request.body`
 - Middleware functions have to be used before routes
-  - Can be called after route is no route handler processes the HTTP request
+  - Can be called after route if no route handler processes the HTTP request
   - Make middleware to catch requests made to non-existent routes:
 
 ```js

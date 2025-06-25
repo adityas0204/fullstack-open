@@ -1,8 +1,8 @@
 # [Deploying app to internet](https://fullstackopen.com/en/part3/deploying_app_to_internet)
 
 - We will connect the _notes_ app frontend to the backend 
-- Frontend could aks for notes from json-server backend on address http://localhost:3001/notes
-  - New backend has diff structure, and notes at http://localhost:3001/api/notes
+- Frontend could ask for notes from json-server backend on address http://localhost:3001/notes
+  - New backend has different structure, and notes at http://localhost:3001/api/notes
 - Change `baseUrl` var to reflect this:
 
 ```js
@@ -15,7 +15,7 @@ const baseUrl = 'http://localhost:3001/api/notes'
 ### Same origin policy and CORS
 
 - Problem with `same origin policy`
-- URL's origin defined by combo of protocal (scheme), hostname, and port
+- URL's origin defined by combo of protocol (scheme), hostname, and port
 
 ```
 http://example.com:80/index.html
@@ -59,7 +59,7 @@ app.use(cors())
 ```
 
 - Be intentional when enabling cors
-  - In production, backend shouldn't be visible to public,. so only enable cors from specific origin
+  - In production, backend shouldn't be visible to public, so only enable cors from specific origin
     - Such as frontend
 - Almost all functionality works, except for changing importance due to not being implemented in the backend yet
 - App setup:
@@ -108,17 +108,16 @@ app.listen(PORT, () => {
 
 ### Frontend production build
 
--  We have been runinng React in _development mode_
+-  We have been running React in _development mode_
    -  App gives clear error logs, renders code immediately to browser, and so on
 -  When app is deployed, need to create a production build
-   -  Version of app is optomized for production
+   -  Version of app is optimized for production
 -  Production build for Vite apps done with `npm run build`
    -  Run in frontend of notes app from part 2
 -  A _dist_ directory is created
-   -  Contains _index.html_ file of our app and _assests_ directory
+   -  Contains _index.html_ file of our app and _assets_ directory
    -  Minified versions of our app's JS code will be in _dist_ directory
    -  Minified code is not readable
--  
 
 ### Serving static files from the backend
 
@@ -183,7 +182,7 @@ const getAll = () => {
 ![alt text](images/setup-deployment.png)
 
 - Everything in same node/express-backend that runs in localhost:3001
-  - This is unlike our developemt environment
+  - This is unlike our development environment
 - When browser goes to page, _index.html_ is rendered
 - Which causes browser to fetch production version of React app
 - Once starting, it fetches the json-data from address localhost:3001/api/notes
@@ -203,7 +202,7 @@ const getAll = () => {
 
 ### Streamlining deploying of the frontend
 
-- To reduce manual work when creating production build, reate npm-scripts in _package.json_ of backend repo
+- To reduce manual work when creating production build, create npm-scripts in _package.json_ of backend repo
 - The script for Render is:
 
 ```json
@@ -262,5 +261,5 @@ export default defineConfig({
 npm remove cors
 ```
 
-- The app has been successfully deployed to the internet
+- The app has been successfully deployed
 
