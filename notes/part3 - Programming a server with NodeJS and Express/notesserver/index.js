@@ -3,8 +3,6 @@ const express = require('express')
 const Note = require('./models/note')
 
 const app = express()
-app.use(express.json())
-app.use(express.static('dist'))
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -13,6 +11,24 @@ const requestLogger = (request, response, next) => {
   console.log('---')
   next()
 }
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).send({ error: error.message })
+  }
+  next(error)
+}
+
+app.use(express.json())
+app.use(express.static('dist'))
 app.use(requestLogger)
 
 app.get('/', (request, response) => {
@@ -79,22 +95,10 @@ app.put('/api/notes/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
+
 app.use(unknownEndpoint)
 
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
 
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  } else if (error.name === 'ValidationError') {
-    return response.status(400).send({ error: error.message })
-  }
-  next(error)
-}
-// this has to be the last loaded middleware, also all the routes should be registered before this!
 app.use(errorHandler)
 
 const PORT = process.env.PORT

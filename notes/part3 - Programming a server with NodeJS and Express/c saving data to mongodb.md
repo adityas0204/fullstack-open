@@ -481,7 +481,6 @@ app.use(errorHandler)
 - Use _jsonParser_ at top since it is used in the other routes
 - `unknownEndpoint` catches endpoints that don't exist 
   - It displays an error after all the existing routes have been checked
-- Good practice to call a middleware function right after defining it
 
 ### Other operations
 
