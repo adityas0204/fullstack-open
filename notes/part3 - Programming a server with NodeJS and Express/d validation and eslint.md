@@ -273,5 +273,5 @@ export default [
 ]
 ```
 
-- Can just use a ready-made config from someone else's project
-
+- Can just use a ready-made config from someone else's project in yours
+  - [Airbnb JS style guide](https://github.com/airbnb/javascript) is popular

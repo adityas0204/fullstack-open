@@ -1635,7 +1635,7 @@ npm install axios
 
 - Axios is listed under dependencies in _package.json_
   - The code was also downloaded, and can be found in the _node module_ directory
-- Also install _jason-server_ as a development dependency
+- Also install _json-server_ as a development dependency
   - This means it will only be used during development, not when app running in production
 
 ```
