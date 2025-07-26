@@ -1,9 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkaSIsImlkIjoiNjg3ZWExOTgxYmU3ZTJlYTU3YWFmYTM1IiwiaWF0IjoxNzUzNDcwNjUxfQ.sy4-GJtqdOzrrchhyD4JTMZD7R7VbYr7sJCF4Jh9__Q
 
 {
-    "title": "testing 2",
-    "author": "me", 
-    "url": "nbot muich",
+    "title": "man",
+    "author": "adi", 
+    "url": "asdfdfd",
+    "user": "687ea1981be7e2ea57aafa35",
     "likes": 1
 }
