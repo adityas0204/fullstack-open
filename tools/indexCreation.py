@@ -21,4 +21,3 @@ with open('./tools/index.txt', 'r') as f:
 	content = f.read()
 
 print(content)
-

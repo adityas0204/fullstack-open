@@ -12,4 +12,5 @@ Get-ChildItem -Recurse -Depth 1 -Filter *.md | Get-Content | Set-Content ..\comb
 
 This python file creates new a new directory when a new part is started
 
-### 
+### indexCreation.py
+
