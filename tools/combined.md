@@ -6192,3 +6192,8 @@ else if (error.name === 'TokenExpiredError') {
 
 - The tests dont work anymore, can fix em if u want
 - Login implemented in next part
+# [Login in frontend](https://fullstackopen.com/en/part5/login_in_frontend)
+# [props.children and proptypes](https://fullstackopen.com/en/part5/props_children_and_proptypes)
+# [Testing React apps](https://fullstackopen.com/en/part5/testing_react_apps)
+# [End to end testing: Playwright](https://fullstackopen.com/en/part5/end_to_end_testing_playwright)
+# [End to end testing: Cypress](https://fullstackopen.com/en/part5/end_to_end_testing_cypress)

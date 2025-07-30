@@ -14,3 +14,8 @@ This python file creates new a new directory when a new part is started
 
 ### indexCreation.py
 
+This python file creates a list of all .md note files 
+
+### beforePush.ps1 
+
+This powershell script can be run before committing. It updates the _combined.md_ file and the _index.txt_ file
