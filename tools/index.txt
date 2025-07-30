@@ -1,23 +1,23 @@
-./notes/part0 - Fundamentals/fundamentals.md
-./notes/part1 - Intro to React/a react.md
-./notes/part1 - Intro to React/b js.md
-./notes/part1 - Intro to React/c component state & event handler.md
-./notes/part1 - Intro to React/d complex state & debugging.md
-./notes/part2 - Communicating with server/a rendering collections, modules.md
-./notes/part2 - Communicating with server/b forms.md
-./notes/part2 - Communicating with server/c getting data from server.md
-./notes/part2 - Communicating with server/d altering data in server.md
-./notes/part2 - Communicating with server/e styles.md
-./notes/part3 - Programming a server with NodeJS and Express/a node.js & express.md
-./notes/part3 - Programming a server with NodeJS and Express/b deploying to internet.md
-./notes/part3 - Programming a server with NodeJS and Express/c saving data to mongodb.md
-./notes/part3 - Programming a server with NodeJS and Express/d validation and eslint.md
-./notes/part4 - Testing Express servers, user administration/a structure of backend app, intro to testing.md
-./notes/part4 - Testing Express servers, user administration/b testing the backend.md
-./notes/part4 - Testing Express servers, user administration/c user admin.md
-./notes/part4 - Testing Express servers, user administration/d token authentication.md
-./notes/part5 - Testing React Apps/a login in frontend.md
-./notes/part5 - Testing React Apps/b props children and proptypes.md
-./notes/part5 - Testing React Apps/c testing react apps.md
-./notes/part5 - Testing React Apps/d end to end testing playwright.md
-./notes/part5 - Testing React Apps/e end to end testing cypress.md
+/notes/part0 - Fundamentals/fundamentals.md
+/notes/part1 - Intro to React/a react.md
+/notes/part1 - Intro to React/b js.md
+/notes/part1 - Intro to React/c component state & event handler.md
+/notes/part1 - Intro to React/d complex state & debugging.md
+/notes/part2 - Communicating with server/a rendering collections, modules.md
+/notes/part2 - Communicating with server/b forms.md
+/notes/part2 - Communicating with server/c getting data from server.md
+/notes/part2 - Communicating with server/d altering data in server.md
+/notes/part2 - Communicating with server/e styles.md
+/notes/part3 - Programming a server with NodeJS and Express/a node.js & express.md
+/notes/part3 - Programming a server with NodeJS and Express/b deploying to internet.md
+/notes/part3 - Programming a server with NodeJS and Express/c saving data to mongodb.md
+/notes/part3 - Programming a server with NodeJS and Express/d validation and eslint.md
+/notes/part4 - Testing Express servers, user administration/a structure of backend app, intro to testing.md
+/notes/part4 - Testing Express servers, user administration/b testing the backend.md
+/notes/part4 - Testing Express servers, user administration/c user admin.md
+/notes/part4 - Testing Express servers, user administration/d token authentication.md
+/notes/part5 - Testing React Apps/a login in frontend.md
+/notes/part5 - Testing React Apps/b props children and proptypes.md
+/notes/part5 - Testing React Apps/c testing react apps.md
+/notes/part5 - Testing React Apps/d end to end testing playwright.md
+/notes/part5 - Testing React Apps/e end to end testing cypress.md

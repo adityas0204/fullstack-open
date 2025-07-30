@@ -13,7 +13,7 @@ for root, dirs, files in os.walk(base_path):
 
     for file in files:
         if file.endswith('.md'):
-            index.write((os.path.join(root, file) + '\n').replace("\\", "/"))
+            index.write((os.path.join(root, file) + '\n').replace("\\", "/").replace('./', '/'))
 
 index.close()
 
