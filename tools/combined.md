@@ -6193,7 +6193,747 @@ else if (error.name === 'TokenExpiredError') {
 - The tests dont work anymore, can fix em if u want
 - Login implemented in next part
 # [Login in frontend](https://fullstackopen.com/en/part5/login_in_frontend)
+
+- Cant add new notes through the front end since backend expects a token verifying the users identity
+  - Will implement user management functionality to frontend
+- Will assume that new users are not added through the frontend
+
+### Handling login
+
+- Code in _App_ component:
+
+```jsx
+const App = () => {
+  const [notes, setNotes] = useState([]) 
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [username, setUsername] = useState('') 
+  const [password, setPassword] = useState('') 
+
+  useEffect(() => {
+    noteService
+      .getAll().then(initialNotes => {
+        setNotes(initialNotes)
+      })
+  }, [])
+
+  // ...
+
+  const handleLogin = (event) => {
+    event.preventDefault()
+    console.log('logging in with', username, password)
+  }
+
+  return (
+    <div>
+      <h1>Notes</h1>
+
+      <Notification message={errorMessage} />
+
+      <form onSubmit={handleLogin}>
+        <div>
+          username
+            <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          password
+            <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
+
+      // ...
+    </div>
+  )
+}
+
+export default App
+```
+
+- Reminder to connect backend to frontend by running `npm run dev` for both (connected through prox in _vite.config.js_)
+- Login form is handled the same way as before
+  - App state has field for _username_ and _password_ 
+  - They have event handler which synchronize changes in field to state (as shown in _part2 b_)
+  - Event handlers are the same 
+- Method `handleLogin` is yet to be implemented
+- Logging in is done through HTTP POST request to server address _api/login_ 
+  - Put this code in own module _services/login.js_
+- Will use _async/await_ syntax for HTTP request:
+
+```js
+import axios from 'axios'
+const baseUrl = '/api/login'
+
+const login = async credentials => {
+  const response = await axios.post(baseUrl, credentials)
+  return response.data
+}
+
+export default { login }
+```
+
+- Method for logging in handled as follows:
+
+```jsx
+import loginService from './services/login'
+
+const App = () => {
+  // ...
+  const [username, setUsername] = useState('') 
+  const [password, setPassword] = useState('') 
+  const [user, setUser] = useState(null)
+  
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    
+    try {
+      const user = await loginService.login({
+        username, password,
+      })
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+    
+  // ...
+}
+```
+
+- Successful login clears the form fields
+  - Server response is also saved to _user_ field of app's state (it includes a _token_ and user details)
+- If login fails, then warning appears
+- Modify login field to only show if user is not logged in (to show user if logged in or not)
+  - When `user === null`
+- Form for adding new notes shown only if _user is logged in
+  - So when user state contains users details
+- Add two helper functions to _App_ component for forms:
+
+```jsx
+const App = () => {
+  // ...
+
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
+      <div>
+        username
+          <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={({ target }) => setUsername(target.value)}
+        />
+      </div>
+      <div>
+        password
+          <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button type="submit">login</button>
+    </form>      
+  )
+
+  const noteForm = () => (
+    <form onSubmit={addNote}>
+      <input
+        value={newNote}
+        onChange={handleNoteChange}
+      />
+      <button type="submit">save</button>
+    </form>  
+  )
+
+  return (
+    // ...
+  )
+}
+```
+
+- Conditionally render them:
+
+```jsx
+const App = () => {
+  // ...
+
+  const loginForm = () => (
+    // ...
+  )
+
+  const noteForm = () => (
+    // ...
+  )
+
+  return (
+    <div>
+      <h1>Notes</h1>
+
+      <Notification message={errorMessage} />
+
+      {user === null && loginForm()}
+      {user !== null && noteForm()}
+
+      <div>
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? 'important' : 'all'}
+        </button>
+      </div>
+      <ul>
+        {notesToShow.map((note, i) => 
+          <Note
+            key={i}
+            note={note} 
+            toggleImportance={() => toggleImportanceOf(note.id)}
+          />
+        )}
+      </ul>
+
+      <Footer />
+    </div>
+  )
+}
+```
+
+- This employs a common [React trick](https://react.dev/learn/conditional-rendering#logical-and-operator-) to render things conditionally
+  - In JSX, `{cond ? <A /> : <B />}` means “if `cond`, render `<A />`, otherwise `<B />`”
+  - In JSX, `{cond && <A />}` means “if `cond`, render `<A />`, otherwise nothing”
+    - This works since if the first statement (`cond`) is false the whole statement becomes false and the second statement is not rendered
+- Can be simplified further:
+
+```jsx
+{user === null 
+    ? loginForm() 
+    : noteForm()
+}
+```
+
+- Make another modification, if user is logged in then it shows their name on the screen:
+
+```jsx
+{user === null 
+  ? loginForm() 
+  : <div> 
+    <p>{user.name} logged-in</p>
+    {noteForm()}
+  </div>
+}
+```
+
+- This aint perfect but it works for now
+- Will also refactor _App_ component into individual components 
+
+### Creating new notes
+
+- `user` state contains token returned on successful login
+
+```jsx
+setUser(user)
+```
+
+- Add token of logged-in user to Authorization header of HTTP request now
+- _noteServices_ module changes:
+
+```js
+import axios from 'axios'
+const baseUrl = '/api/notes'
+
+let token = null
+
+const setToken = newToken => {
+  token = `Bearer ${newToken}`
+}
+
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
+}
+
+const create = async newObject => {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.post(baseUrl, newObject, config)
+  return response.data
+}
+
+const update = (id, newObject) => {
+  const request = axios.put(`${ baseUrl }/${id}`, newObject)
+  return request.then(response => response.data)
+}
+
+export default { getAll, create, update, setToken }
+```
+
+- `token` variable which can be manipuated by `setToken` method, exported with module
+- `create` method sets token to the Authorization header 
+  - Header given to axios as third param of _post_ method
+- Event handler for login must call method `noteService.setToken(user.token)` when successful login
+- Adding a new note works now
+
+### Saving the token to the browser's local storage
+
+- Problem: if poage refreshed, user login is forgotten
+  - Will solve using browser's db
+- Local storage is a key-value db in the browser
+- _value_ with _key_ stored in db using `setItem` method:
+
+```js
+window.localStorage.setItem('name', 'juha tauriainen')
+```
+
+- Normal key value pair stuff
+- value of key found using method `getItem`:
+
+```jsx
+window.localstorage.getItem('name')
+```
+
+- `removeItem` removes a kay
+- Values in local storage remains after reloading (page re-rendered)
+  - Storage is [origin-specific](https://developer.mozilla.org/en-US/docs/Glossary/Origin) so each we app has its own storage
+- Will extend app so details of logged-in user saved to local storage
+  - Values saved as DOMstrings, so cant save JS objects as is
+  - Must parse object into JSON with `JSON.stringify()`
+  - Then when object read from storage, you must convert it back to JS object yusing `JSON.parse()`
+- Changes to login method:
+
+```jsx
+const handleLogin = async (event) => {
+  event.preventDefault()
+  try {
+    const user = await loginService.login({
+      username, password,
+    })
+
+    window.localStorage.setItem(
+      'loggedNoteappUser', JSON.stringify(user)
+    ) 
+    noteService.setToken(user.token)
+    setUser(user)
+    setUsername('')
+    setPassword('')
+  } catch (exception) {
+    // ...
+  }
+}
+```
+
+- Local storage data can be seen by typing `window.localStorage` in the console
+
+![alt text](images/local-storage.png)
+
+- You can also see the local storage in the _Storage_ tab
+- Still need to make it so if user details are in local storage, then details are saved to state of app and to _noteService_
+  - Right way to do this is to use an effect hook:
+
+```jsx
+useEffect(() => {
+	const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser');
+	if (loggedUserJSON) {
+		const user = JSON.parse(loggedUserJSON);
+		setUser(user);
+		noteService.setToken(user.token);
+	}
+}, []);
+```
+
+- Empty array as param of effect ensure effect only runs when component rendered for firt time
+- Now user logged in forever
+  - Need to add _logout_ functionality, this is exercise for user
+    - We will just use the console and the following command: `window.localStorage.removeItem('loggedNoteappUser')` or empty the whole storage: `window.localStorage.clear()` 
 # [props.children and proptypes](https://fullstackopen.com/en/part5/props_children_and_proptypes)
+
+### Displaying the login form only when appropriate
+
+- Modify app so login form not shown until user clicks _login_
+  -  User can hit _cancel_ to close form
+-  Extract the login form to its own component:
+
+```jsx
+const LoginForm = ({ handleLogin, username, handleUsernameChange, password, handlePasswordChange }) => (
+  <div> 
+    <h2>Login</h2>
+
+    <form onSubmit={handleLogin}>
+      <div>
+        username
+          <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={handleUsernameChange}
+        />
+      </div>
+      <div>
+        password
+          <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={handlePasswordChange}
+        />
+      </div>
+      <button type="submit">login</button>
+    </form>
+  </div>
+)
+
+export default LoginForm
+```
+
+- Note that we have 'lifted the state up' 
+- One way to implement funcitonality that we had discussed is to change `loginForm` function of _App_ component like so:
+
+```jsx
+const App = () => {
+
+  const [loginVisible, setLoginVisible] = useState(false)
+
+  // ...
+
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
+
+  // ...
+}
+```
+
+- App has _loginVisible_ state, which defines if login form should be visible or not
+- Value of `loginVisible` toggled with two buttons:
+
+```jsx
+<button onClick={() => setLoginVisible(true)}>log in</button>
+
+<button onClick={() => setLoginVisible(false)}>cancel</button>
+```
+
+- Visibility of component defined by inline style rule
+  - If display property is _none_ then component not displayed:
+
+```jsx
+const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+<div style={hideWhenVisible}>
+  // button
+</div>
+
+<div style={showWhenVisible}>
+  // button
+</div>
+```
+
+- Ternary operator used for determining value of _display_
+
+### The components children, aka. props.children
+
+- Code for magaing visibilty of login form can be its own component
+  - Its unique
+  - Will extract into separate component
+- Want to create new _Togglable_ components to use as follows:
+
+```jsx
+<Togglable buttonLabel='login'>
+  <LoginForm
+    username={username}
+    password={password}
+    handleUsernameChange={({ target }) => setUsername(target.value)}
+    handlePasswordChange={({ target }) => setPassword(target.value)}
+    handleSubmit={handleLogin}
+  />
+</Togglable>
+```
+
+- This component is different
+  - Has both opening and closing tags
+  - Tags surround _LoginForm_ component, making it a child component
+- Can add any React elements between opening and closing tags:
+
+```jsx
+<Togglable buttonLabel="reveal">
+  <p>this line is at start hidden</p>
+  <p>also this is hidden</p>
+</Togglable>
+```
+
+- Code for _Togglable_ component:
+
+```jsx
+import { useState } from 'react'
+
+const Togglable = (props) => {
+  const [visible, setVisible] = useState(false)
+
+  const hideWhenVisible = { display: visible ? 'none' : '' }
+  const showWhenVisible = { display: visible ? '' : 'none' }
+
+  const toggleVisibility = () => {
+    setVisible(!visible)
+  }
+
+  return (
+    <div>
+      <div style={hideWhenVisible}>
+        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+      </div>
+      <div style={showWhenVisible}>
+        {props.children}
+        <button onClick={toggleVisibility}>cancel</button>
+      </div>
+    </div>
+  )
+}
+
+export default Togglable
+```
+
+- `props.children` is used for referencing child components of the component
+  - Child components are the React elementswe define between the tags of the component
+- Children rendered in the code used for rendering the component:
+
+```jsx
+<div style={showWhenVisible}>
+  {props.children}
+  <button onClick={toggleVisibility}>cancel</button>
+</div>
+```
+
+- `children` is a prop automatically added by React
+- If component defined with closing tag `/>`:
+
+```jsx
+<Note
+  key={note.id}
+  note={note}
+  toggleImportance={() => toggleImportanceOf(note.id)}
+/>
+```
+
+- Then `props.children` will be an empty array
+- This makes _Togglable_ component reusable
+- Extract NoteForm into component:
+
+```jsx
+const NoteForm = ({  onSubmit, value, handleChange }) => (
+  <div>
+    <h2>Create a new note</h2>
+
+    <form onSubmit={onSubmit}>
+      <input 
+        value={value}
+        onChange={handleChange}
+      />
+      <button type="submit">save</button>
+    </form>
+  </div>
+)
+
+export default NoteForm
+```
+
+- Define form component inside _Togglable_ component:
+
+```jsx
+<Togglable buttonLabel="new note">
+  <NoteForm
+    onSubmit={addNote}
+    value={newNote}
+    handleChange={handleNoteChange}
+  />
+</Togglable>
+```
+
+### State of the forms
+
+- State of app is currently in `App` component
+- React says if state of two components always change together, then move the state into the closest common component and then pass the state down using props
+  - This is called lifting state up
+- The state of forms have when a new note is created is not used anywhere else in the `App` component
+  - So, we can put it in the `NoteForm` component:
+
+```jsx
+import { useState } from 'react'
+
+const NoteForm = ({ createNote }) => {
+  const [newNote, setNewNote] = useState('')
+
+  const addNote = (event) => {
+    event.preventDefault()
+    createNote({
+      content: newNote,
+      important: true
+    })
+
+    setNewNote('')
+  }
+
+  return (
+    <div>
+      <h2>Create a new note</h2>
+
+      <form onSubmit={addNote}>
+        <input
+          value={newNote}
+          onChange={event => setNewNote(event.target.value)}
+        />
+        <button type="submit">save</button>
+      </form>
+    </div>
+  )
+}
+
+export default NoteForm
+```
+
+- `newNote` state var and event handler responsible for changing it have been moved into component responsible for note form
+- `createNote` function is called when new note created
+- In `App` component, `addNote` function recieves note as param, and this function is passed as prop to note form component:
+
+```jsx
+const App = () => {
+  // ...
+  const addNote = (noteObject) => {
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
+      })
+  }
+  // ...
+  const noteForm = () => (
+    <Togglable buttonLabel='new note'>
+      <NoteForm createNote={addNote} />
+    </Togglable>
+  )
+  // ...
+}
+```
+
+- Also did this type of implementation with the login form
+
+### References to components with ref
+
+ - Want to disappear new note form after new note is created
+   - Problem is that _visible_ state is controlled in _Togglable_ component
+   - But note form does not have access to _visible_ state 
+ - One solution is to move control of _Togglable_ component 
+ - Another solution is to use ref mechanism of React
+   - Change _App_ component:
+
+```jsx
+import { useState, useEffect, useRef } from 'react'
+
+const App = () => {
+  // ...
+  const noteFormRef = useRef()
+
+  const noteForm = () => (
+    <Togglable buttonLabel='new note' ref={noteFormRef}>
+      <NoteForm createNote={addNote} />
+    </Togglable>
+  )
+  // ...
+}
+```
+
+- `useRef` hook used to create _noteFormRef_ reference assigned to _Togglable_ component containing creation note form
+- _noteFormRef_ var acts as reference to component
+  - Will exist and retain value throughout re-renders of component
+- Change _Togglable_ component:
+
+```jsx
+import { useState, forwardRef, useImperativeHandle } from 'react'
+
+const Togglable = forwardRef((props, refs) => {
+  const [visible, setVisible] = useState(false)
+
+  const hideWhenVisible = { display: visible ? 'none' : '' }
+  const showWhenVisible = { display: visible ? '' : 'none' }
+
+  const toggleVisibility = () => {
+    setVisible(!visible)
+  }
+
+  useImperativeHandle(refs, () => {
+    return {
+      toggleVisibility
+    }
+  })
+
+  return (
+    <div>
+      <div style={hideWhenVisible}>
+        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+      </div>
+      <div style={showWhenVisible}>
+        {props.children}
+        <button onClick={toggleVisibility}>cancel</button>
+      </div>
+    </div>
+  )
+})
+
+export default Togglable
+```
+
+- Function that creates component is wrapped in `forwardRed` function call
+  - Component can access ref assigned to it
+- `useImperativeHandle` hook makes _toggleVisibilty_ available function available outside component
+- Can call `noteFormRef.current.toggleVisibility` in parent component:
+
+```jsx
+const App = () => {
+  // ...
+  const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility()
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {     
+        setNotes(notes.concat(returnedNote))
+      })
+  }
+  // ...
+}
+```
 # [Testing React apps](https://fullstackopen.com/en/part5/testing_react_apps)
 # [End to end testing: Playwright](https://fullstackopen.com/en/part5/end_to_end_testing_playwright)
 # [End to end testing: Cypress](https://fullstackopen.com/en/part5/end_to_end_testing_cypress)

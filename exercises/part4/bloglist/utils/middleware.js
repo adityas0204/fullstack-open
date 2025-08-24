@@ -21,10 +21,10 @@ const userExtractor = (request, response, next) => {
   try {
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
     request.user = decodedToken
-    next()
   } catch {
     return response.status(401).json({ error: 'token validation' })
   }
+  next()
 }
 
 const errorHandler = (error, request, response, next) => {
