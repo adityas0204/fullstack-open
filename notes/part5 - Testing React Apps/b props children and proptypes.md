@@ -372,3 +372,58 @@ const App = () => {
   // ...
 }
 ```
+
+### PropTypes
+
+- Component can work without all of its props:
+
+```jsx
+<Togglable> buttonLabel forgotten... </Togglable>
+```
+
+- But we want to enforce thatr if this componenet is used, then all props must be given a value
+- Will use prop-types package:
+
+```bash
+npm install prop-types
+```
+
+- Can define a prop as mandatory or _required_ strin-type prop:
+
+```jsx
+import PropTypes from 'prop-types'
+
+const Togglable = React.forwardRef((props, ref) => {
+  // ..
+})
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired
+}
+```
+
+- If no prop is provided, then an error will appear in the console
+  - App will continue running though
+
+### ESlint
+
+- Configure ESling for frontend
+  - Vite install ESlint by default into our project
+- Make _.eslintrc.cjs_ file and add out lint settings
+- Then create a _.eslintignore_ file:
+
+```
+node_modules
+dist
+.eslintrc.cjs
+vite.config.js
+```
+
+- Run command:
+
+```bash
+npm run lint
+```
+
+
+

@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import BlogInfo from './components/BlogInfo'
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import loginService from './services/login'
@@ -131,17 +130,13 @@ const App = () => {
             </Togglable>
             
             {blogs.map(blog => (
-              <Blog key={blog.id} blog={blog}>
-                <BlogInfo 
-                  url={blog.url} 
-                  likes={blog.likes} 
-                  username={blog.user.name} 
-                  user={blog.user.username} 
-                  loggedInUser={user.username} 
-                  handleLikes={() => handleLikes(event, blog.id)}
-                  handleDelete={() => handleDelete(event, blog.id, blog.title, blog.author)}  
-                />
-              </Blog>
+              <Blog 
+                key={blog.id} 
+                blog={blog} 
+                handleLikes={() => handleLikes(blog.id)} 
+                handleDelete={() => handleDelete(blog.id, blog.title, blog.author)} 
+                loggedInUser={user.username} 
+              />
               )
             )}
           </div>
